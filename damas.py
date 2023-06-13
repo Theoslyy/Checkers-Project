@@ -11,3 +11,4 @@ def tabuleiro(n):
         print()
 n = 8
 tabuleiro(n)
+print("Doido Teve!")
