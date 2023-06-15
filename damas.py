@@ -55,6 +55,7 @@ def jogada_player(x):
     coluna_final=(ord(cordenadas_final[0])-64)
     linha_final=(int(cordenadas_final[1])*2+2)
     valido=False
+    #MOVIMENTO DE COMER NÃO PLENAMENTE IMPLEMENTADO, TEM QUE CHECAR SE TEM UMA PEÇA ENTRE O MOVIMENTO
     if matriz[linha_inicio][coluna_inicio]=="o" and ((((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) or ((linha_final==linha_inicio+4) and ((coluna_final == coluna_inicio+2) or (coluna_final == coluna_inicio-2)))) and matriz[linha_final][coluna_final]==" ":
         valido=True #AO PULAR LINHAS, LEMBRAR-SE QUE NA MATRIZ EXISTE AS LINHAS DE +- NO MEIO, OU SEJA, O PULO TEM QUE SER DUPLO AO INVÉS DE UNITÁRIO.
         return valido
