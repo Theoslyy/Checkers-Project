@@ -54,11 +54,17 @@ def jogada_player(x):
     cordenadas_final=converter(entrada[1])
     coluna_final=(ord(cordenadas_final[0])-64)
     linha_final=(int(cordenadas_final[1])*2+2)
-    valido=False
-    if matriz[linha_inicio][coluna_inicio]=="o" and ((((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) or ((linha_final==linha_inicio+4) and ((coluna_final == coluna_inicio+2) or (coluna_final == coluna_inicio-2)))) and matriz[linha_final][coluna_final]==" ":
+    if coluna_final == coluna_inicio+2 or coluna_final == coluna_inicio-2:
+        checagempos_coluna = coluna_inicio+1
+        checagemneg_coluna = coluna_inicio-1
+        checagempos_linha = linha_inicio+2
+        checagemneg_linha = linha_inicio-2
+    valido = False
+
+    if matriz[linha_inicio][coluna_inicio]=="o" and ((((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) or ((linha_final==linha_inicio+4) and ((matriz[checagempos_linha][checagempos_coluna] == "@") or (matriz[checagempos_linha][checagemneg_coluna] == "@")) and ((coluna_final == coluna_inicio+2) or (coluna_final == coluna_inicio-2)))) and matriz[linha_final][coluna_final]==" ":
         valido=True #AO PULAR LINHAS, LEMBRAR-SE QUE NA MATRIZ EXISTE AS LINHAS DE +- NO MEIO, OU SEJA, O PULO TEM QUE SER DUPLO AO INVÉS DE UNITÁRIO.
         return valido
-    elif matriz[linha_inicio][coluna_inicio]=="@" and ((((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) or ((linha_final==linha_inicio-4) and ((coluna_final == coluna_inicio+2) or (coluna_final == coluna_inicio-2)))) and matriz[linha_final][coluna_final]==" ":
+    if matriz[linha_inicio][coluna_inicio]=="@" and ((((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) or ((linha_final==linha_inicio+4) and ((matriz[checagemneg_linha][checagempos_coluna] == "o") or (matriz[checagemneg_linha][checagemneg_coluna] == "o")) and ((coluna_final == coluna_inicio+2) or (coluna_final == coluna_inicio-2)))) and matriz[linha_final][coluna_final]==" ":
         valido= True
         return valido
     if valido==False:
