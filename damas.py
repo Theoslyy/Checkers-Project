@@ -1,17 +1,76 @@
 import numpy as np
-def tabuleiro(n):
+def converter(string):
+    x=[i for i in string]
+    return x
+def tabuleiro_inicio():
+    #inicializando a matriz
+    matriz = np.zeros((23,12), dtype=str)
+    matriz[::4, ::2] = "#"
+    matriz[::4, 1::2] = " "
+    matriz[2::4, ::2]=" "
+    matriz[2::4, 1::2]="#"
+    for i in range(23):
+        for j in range(12):
+            if (i==0 or i==22) and 0<j<=10:
+                matriz[i][j]=chr(65+(j-1))
+            if 0<i<7 and ((i%4!=0 and j%2==0) or (i%4==0 and j%2==1)) and 0<j<11:
+                matriz[i][j]="o"
+            if 15<=i<22 and ((i%4!=0 and j%2==0) or (i%4==0 and j%2==1)) and 0<j<11:
+                matriz[i][j]="@"
+            if i%2==1 and (j!=0 or j!=11):
+                matriz[i][j]="-"
+            if (j==0 or j==11) and i%2==0 and (i!=0 and i!=22):
+                matriz[i][j]=str((i/2)-1)
+            elif (j==0 or j==11):
+                matriz[i][j]=" "
+    return matriz
+def print_tabuleiro(x):
     print("A configuraçao é:")
-    x = np.zeros((n,n), dtype=str)
-    x[1::2, ::2] = "*"
-    x[::2, 1::2] = "*"
-    x[1::2, 1::2] = "%"
-    x[::2, ::2]=  "%"
-    for i in range(n):
-        for j in range(n):
-            if i == 0 and j+1<n:
-                x[i][j+1]=chr(97+j)
-            if j == 0 and i+1<n:
-                x[i+1][j] = i
-            print(x[i][j], end=" ")
+    matriz=x
+    for i in range(23):
+        for j in range(12): 
+            if i%2==1 and (i!=0 and i!=22) and (j!=11):
+                print(matriz[i][j], end="+")
+            elif (i==0 or i ==22) or j==11:
+                print(matriz[i][j], end=" ")
+            else:
+                print(matriz[i][j], end="|")
         print()
-tabuleiro(10)
+def dama(x):
+    matriz=x
+    for i in range(2,21,18):
+        for j in range(12):
+            if (matriz[i][j]=="@" and i==2):
+                matriz[i][j]="&"
+            if (matriz[i][j]=="o" and i==20):
+                matriz[i][j]="O"
+    return x
+def jogada_player(x):
+    matriz=x
+    entrada= input().split("--")
+    cordenadas_inicio=converter(entrada[0])
+    coluna_inicio=(ord(cordenadas_inicio[0])-64)
+    linha_inicio=(int(cordenadas_inicio[1])*2+2)
+    cordenadas_final=converter(entrada[1])
+    coluna_final=(ord(cordenadas_final[0])-64)
+    linha_final=(int(cordenadas_final[1])*2+2)
+    valido=False
+    if matriz[linha_inicio][coluna_inicio]=="o" and ((((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) or ((linha_final==linha_inicio+4) and ((coluna_final == coluna_inicio+2) or (coluna_final == coluna_inicio-2)))) and matriz[linha_final][coluna_final]==" ":
+        valido=True #AO PULAR LINHAS, LEMBRAR-SE QUE NA MATRIZ EXISTE AS LINHAS DE +- NO MEIO, OU SEJA, O PULO TEM QUE SER DUPLO AO INVÉS DE UNITÁRIO.
+        return valido
+    elif matriz[linha_inicio][coluna_inicio]=="@" and ((((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) or ((linha_final==linha_inicio-4) and ((coluna_final == coluna_inicio+2) or (coluna_final == coluna_inicio-2)))) and matriz[linha_final][coluna_final]==" ":
+        valido= True
+        return valido
+    if valido==False:
+        print("Input não aceito, por favor, tente novamente")
+        jogada_player(x)
+        """
+        entrada=input().split("--")
+        cordenadas_inicio=converter(entrada[0]) 
+        coluna_inicio=(ord(cordenadas_inicio[0])-64)
+        linha_inicio=(int(cordenadas_inicio[1])*2+2)
+        cordenadas_final=converter(entrada[1])
+        coluna_final=(ord(cordenadas_final[0])-64)
+        linha_final=(int(cordenadas_final[1])*2+2)
+        """
+jogada_player(tabuleiro_inicio())
