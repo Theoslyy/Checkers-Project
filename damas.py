@@ -25,6 +25,7 @@ def tabuleiro_inicio():
                 matriz[i][j]=" "
     return matriz
 def print_tabuleiro(x):
+    #printando a matriz
     print("A configuraçao é:")
     matriz=x
     for i in range(23):
@@ -37,6 +38,7 @@ def print_tabuleiro(x):
                 print(matriz[i][j], end="|")
         print()
 def eh_dama(x):
+    #transforma uma peça em dama
     matriz=x
     for i in range(2,21,18):
         for j in range(12):
@@ -71,6 +73,7 @@ def pode_ser_comida(x):
                     posso_comer=True
     return posso_comer
 def jogada_player1(x):
+    #fazer a jogada do player 1
     matriz=x
     entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
     cordenadas_inicio=converter(entrada[0])
