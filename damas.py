@@ -90,7 +90,10 @@ def jogada_player1(x):
         valido=True #AO PULAR LINHAS, LEMBRAR-SE QUE NA MATRIZ EXISTE AS LINHAS DE +- NO MEIO, OU SEJA, O PULO TEM QUE SER DUPLO AO INVÉS DE UNITÁRIO.
     if matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and matriz[linha_final-2][coluna_final-1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and matriz[linha_final+2][coluna_final+1]=="@") and matriz[linha_final][coluna_final]==" ":
         valido=True
-        captura=True  
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and matriz[linha_final-2][coluna_final+1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and matriz[linha_final+2][coluna_final-1]=="@") and matriz[linha_final][coluna_final]==" ":
+        valido=True
+        captura=True
     #VERIFICANDO SE NÃO HÁ NENHUMA PEÇA QUE POSSA SER COMIDA, SE HOUVER, O JOGADOR É OBRIGADO A EXECUTAR O MOVIMENTO DE COMÊ-LA
     if y==True and matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
         valido=False
