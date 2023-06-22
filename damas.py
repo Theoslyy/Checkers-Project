@@ -25,7 +25,6 @@ def tabuleiro_inicio():
                 matriz[i][j]=" "
     return matriz
 def print_tabuleiro(x):
-    print("A configuraçao é:")
     matriz=x
     for i in range(23):
         for j in range(12): 
@@ -70,6 +69,37 @@ def pode_ser_comida(x):
                 if matriz[i+2][j-1]=="o" and matriz[i-2][j+1]==" ":
                     posso_comer=True
     return posso_comer
+def dama_ta_livre(m,a,b,c,d):
+    ta_livre=True
+    if a>c and b>d:
+        while a>c and b>d:
+            a-=2
+            b-=1
+            if m[a][b]!=" ":
+                ta_livre=False
+                break
+    elif a<c and b<d:
+        while a<c and b<d:
+            a+=2
+            b+=1
+            if m[a][b]!=" ":
+                ta_livre=False
+                break
+    elif a>c and b<d:
+        while a>c and b<d:
+            a-=2
+            b+=1
+            if m[a][b]!=" ":
+                ta_livre=False
+                break
+    elif a<c and b>d:
+        while a<c and b>d:
+            a+=2
+            b-=1
+            if m[a][b]!=" ":
+                ta_livre=False
+                break
+    return ta_livre
 def jogada_player1(x):
     matriz=x
     entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
@@ -82,18 +112,26 @@ def jogada_player1(x):
     valido=False
     captura=False
     y=pode_ser_comida(matriz)
+    z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
     #VERIFICANDO SE O MOVIMENTO É VÁLIDO
     if matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
-        valido=True #AO PULAR LINHAS, LEMBRAR-SE QUE NA MATRIZ EXISTE AS LINHAS DE +- NO MEIO, OU SEJA, O PULO TEM QUE SER DUPLO AO INVÉS DE UNITÁRIO.
+        valido=True 
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and (((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)-coluna_final)==(linha_inicio-coluna_inicio))) and z==True:
+        valido=True
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and (((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)+coluna_final)==(linha_inicio+coluna_inicio))) and z==True:
+        valido=True
     if matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and matriz[linha_final-2][coluna_final-1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and matriz[linha_final+2][coluna_final+1]=="@") and matriz[linha_final][coluna_final]==" ":
         valido=True
-        captura=True  
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and matriz[linha_final-2][coluna_final+1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and matriz[linha_final+2][coluna_final-1]=="@") and matriz[linha_final][coluna_final]==" ":
+        valido=True
+        captura=True
     #VERIFICANDO SE NÃO HÁ NENHUMA PEÇA QUE POSSA SER COMIDA, SE HOUVER, O JOGADOR É OBRIGADO A EXECUTAR O MOVIMENTO DE COMÊ-LA
     if y==True and matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
         valido=False
     while valido==False:
     #SE O MOVIMENTO NÃO FOR VÁLIDO, O CÓDIGO SE REPETE
-        print("Input inválido, por favor, tente novamente")
+        print("Jogada inválida, por favor, tente novamente")
         matriz=x
         entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
         cordenadas_inicio=converter(entrada[0])
@@ -105,12 +143,17 @@ def jogada_player1(x):
         valido=False
         captura=False
         y=pode_ser_comida(matriz)
+        z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
         if matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
-            valido=True #AO PULAR LINHAS, LEMBRAR-SE QUE NA MATRIZ EXISTE AS LINHAS DE +- NO MEIO, OU SEJA, O PULO TEM QUE SER DUPLO AO INVÉS DE UNITÁRIO.
+            valido=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and (((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)-coluna_final)==(linha_inicio-coluna_inicio))) and z==True:
+            valido=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and (((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)+coluna_final)==(linha_inicio+coluna_inicio))) and z==True:
+            valido=True
         if matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and matriz[linha_final-2][coluna_final-1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and matriz[linha_final+2][coluna_final+1]=="@") and matriz[linha_final][coluna_final]==" ":
             valido=True
-            captura=True  
-        elif matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and matriz[linha_final-2][coluna_final+1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and matriz[linha_final+2][coluna_final-1]=="@") and matriz[linha_final][coluna_final]==" ":
+            captura=True
+        elif matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and matriz[linha_final-2][coluna_final+1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and matriz[linha_final+2][coluna_final-1]=="@") and matriz[linha_final][coluna_final]==" ":
             valido=True
             captura=True
         if y==True and matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
@@ -130,8 +173,8 @@ def jogada_player1(x):
         elif linha_final==linha_inicio-4:
             linha_captura=linha_final+2
         matriz[linha_captura][coluna_captura]=" "
-        print("Você comeu uma peça!, jogue novamente")
         print_tabuleiro(matriz)
+        print("Você comeu uma peça! Jogue novamente.")
         jogada_player1(matriz)
     return matriz
 def jogada_player2(x):
@@ -147,7 +190,12 @@ def jogada_player2(x):
     valido=False
     captura=False
     y=pode_ser_comida(matriz)
+    z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
     if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1)))  and matriz[linha_final][coluna_final]==" ":
+        valido=True
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and (((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)-coluna_final)==(linha_inicio-coluna_inicio))) and z==True:
+        valido=True
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and (((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)+coluna_final)==(linha_inicio+coluna_inicio))) and z==True:
         valido=True
     if matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and matriz[linha_final-2][coluna_final-1]=="o" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and matriz[linha_final+2][coluna_final+1]=="o") and matriz[linha_final][coluna_final]==" ":
         valido=True
@@ -158,7 +206,7 @@ def jogada_player2(x):
     if y==True and matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
             valido=False
     while valido==False:
-        print("Input inválido, por favor, tente novamente")
+        print("Jogada inválida, por favor, tente novamente")
         matriz=x
         entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
         cordenadas_inicio=converter(entrada[0])
@@ -170,8 +218,13 @@ def jogada_player2(x):
         valido=False
         captura=False
         y=pode_ser_comida(matriz)
+        z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
         if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1)))  and matriz[linha_final][coluna_final]==" ":
             valido= True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and (((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)-coluna_final)==(linha_inicio-coluna_inicio))) and z==True:
+            valido=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and (((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)+coluna_final)==(linha_inicio+coluna_inicio))) and z==True:
+            valido=True
         if matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and matriz[linha_final-2][coluna_final-1]=="o" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and matriz[linha_final+2][coluna_final+1]=="o") and matriz[linha_final][coluna_final]==" ":
             valido=True
             captura=True
@@ -193,8 +246,8 @@ def jogada_player2(x):
         elif linha_final==linha_inicio-4:
             linha_capturada=linha_final+2
         matriz[linha_capturada][coluna_capturada]=" "
-        print("Você comeu uma peça!, jogue novamente")
         print_tabuleiro(matriz)
+        print("Você comeu uma peça! Jogue novamente.")
         jogada_player2(matriz)
     return matriz
 
@@ -204,14 +257,32 @@ def jogada_player2(x):
 #pecas1=pecas2=15
 turno=0
 #while acabou==False:
+print("O tabuleiro inicial é:")
 print_tabuleiro(tabuleiro_inicio())
 matriz=(tabuleiro_inicio())
-while True:
-    #EM TURNOS PARES, QUEM JOGA É O JOGADOR DE CIMA, EM TURNOS ÍMPARES, O JOGADOR DE BAIXO, ISSO SERÁ MUDADO NA VERSÃO FINAL
-    if turno%2==0:
-        matriz=jogada_player1(matriz)
-        print_tabuleiro(matriz)
-    if turno%2==1:
-        matriz=jogada_player2(matriz)
-        print_tabuleiro(matriz)
-    turno+=1
+#USUÁRIO ENTRA O CARACTERE "C" OU "B"
+jogador=input("Quem vai começar o jogo (C ou B):\n")
+while jogador!="C" and jogador!="B":
+    print("Entrada inválida, por favor, tente novamente")
+    jogador=input("Quem vai começar o jogo (C ou B):\n")
+if jogador=="C":
+    print("Ok, jogador de cima começa!")
+    while True:
+        if turno%2==0: #COMO O TURNO COMEÇA COM 0, ENTÃO AS JOGADAS PARES SERÃO DO JOGADOR 1 (O JOGADOR DE CIMA)
+            matriz=jogada_player1(matriz)
+            print_tabuleiro(matriz)
+        if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE BAIXO, O JOGADOR 2
+            matriz=jogada_player2(matriz)
+            print_tabuleiro(matriz)
+        turno+=1
+elif jogador=="B":
+    print("Ok, jogador de baixo começa!")
+    while True:
+        if turno%2==0: #COMO O TURNO COMEÇA COM 0, ENTÃO AS JOGADAS PARES SERÃO DO JOGADOR 2 (O JOGADOR DE BAIXO)
+            matriz=jogada_player2(matriz)
+            print_tabuleiro(matriz)
+        if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE CIMA, O JOGADOR 1
+            matriz=jogada_player1(matriz)
+            print_tabuleiro(matriz)
+        turno+=1
+
