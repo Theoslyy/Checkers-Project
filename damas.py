@@ -15,9 +15,9 @@ def tabuleiro_inicio():
             if (i==0 or i==22) and 0<j<=10:
                 matriz[i][j]=chr(65+(j-1))
             if 0<i<7 and ((i%4!=0 and j%2==0) or (i%4==0 and j%2==1)) and 0<j<11:
-                matriz[i][j]="O"
+                matriz[i][j]="o"
             if 15<=i<22 and ((i%4!=0 and j%2==0) or (i%4==0 and j%2==1)) and 0<j<11:
-                matriz[i][j]="&"
+                matriz[i][j]="@"
             if i%2==1 and (j!=0 or j!=11):
                 matriz[i][j]="-"
             if (j==0 or j==11) and i%2==0 and (i!=0 and i!=22):
