@@ -1,7 +1,8 @@
 import numpy as np
 def converter(string):
-    x=[i for i in string]
+    x = [i for i in string]
     return x
+
 def tabuleiro_inicio():
     #inicializando a matriz
     matriz = np.zeros((23,12), dtype=str)
@@ -14,9 +15,9 @@ def tabuleiro_inicio():
             if (i==0 or i==22) and 0<j<=10:
                 matriz[i][j]=chr(65+(j-1))
             if 0<i<7 and ((i%4!=0 and j%2==0) or (i%4==0 and j%2==1)) and 0<j<11:
-                matriz[i][j]="o"
+                matriz[i][j]="O"
             if 15<=i<22 and ((i%4!=0 and j%2==0) or (i%4==0 and j%2==1)) and 0<j<11:
-                matriz[i][j]="@"
+                matriz[i][j]="&"
             if i%2==1 and (j!=0 or j!=11):
                 matriz[i][j]="-"
             if (j==0 or j==11) and i%2==0 and (i!=0 and i!=22):
@@ -72,33 +73,41 @@ def pode_ser_comida(x):
 def dama_ta_livre(m,a,b,c,d):
     ta_livre=True
     if a>c and b>d:
+        a-=2
+        b-=1
         while a>c and b>d:
-            a-=2
-            b-=1
             if m[a][b]!=" ":
                 ta_livre=False
                 break
+            a-=2
+            b-=1
     elif a<c and b<d:
+        a+=2
+        b+=1
         while a<c and b<d:
-            a+=2
-            b+=1
             if m[a][b]!=" ":
                 ta_livre=False
                 break
+            a+=2
+            b+=1
     elif a>c and b<d:
+        a-=2
+        b+=1
         while a>c and b<d:
+            if m[a][b]!=" ":
+                ta_livre=False
+                break
             a-=2
             b+=1
+    elif a<c and b>d:
+        a+=2
+        b-=1
+        while a<c and b>d:
             if m[a][b]!=" ":
                 ta_livre=False
                 break
-    elif a<c and b>d:
-        while a<c and b>d:
             a+=2
             b-=1
-            if m[a][b]!=" ":
-                ta_livre=False
-                break
     return ta_livre
 def jogada_player1(x):
     matriz=x
@@ -116,14 +125,26 @@ def jogada_player1(x):
     #VERIFICANDO SE O MOVIMENTO É VÁLIDO
     if matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
         valido=True 
-    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and (((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)-coluna_final)==(linha_inicio-coluna_inicio))) and z==True:
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
         valido=True
-    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and (((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)+coluna_final)==(linha_inicio+coluna_inicio))) and z==True:
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
         valido=True
-    if matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and matriz[linha_final-2][coluna_final-1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and matriz[linha_final+2][coluna_final+1]=="@") and matriz[linha_final][coluna_final]==" ":
+    if matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and (matriz[linha_final-2][coluna_final-1]=="@" or matriz[linha_final-2][coluna_final-1]=="&") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and (matriz[linha_final+2][coluna_final+1]=="@" or matriz[linha_final+2][coluna_final+1]=="&")) and matriz[linha_final][coluna_final]==" ":
         valido=True
         captura=True
-    elif matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and matriz[linha_final-2][coluna_final+1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and matriz[linha_final+2][coluna_final-1]=="@") and matriz[linha_final][coluna_final]==" ":
+    elif matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and (matriz[linha_final-2][coluna_final+1]=="@" or matriz[linha_final-2][coluna_final+1]=="&") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and (matriz[linha_final+2][coluna_final-1]=="@" or matriz[linha_final+2][coluna_final-1]=="&")) and matriz[linha_final][coluna_final]==" ":
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="@" or matriz[linha_final+2][coluna_final+1]=="&") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="@" or matriz[linha_final-2][coluna_final-1]=="&") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio) and (matriz[linha_final-2][coluna_final+1]=="@" or matriz[linha_final-2][coluna_final+1]=="&") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True):
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio) and (matriz[linha_final+2][coluna_final-1]=="@" or matriz[linha_final+2][coluna_final-1]=="&") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True):                                                                                        
         valido=True
         captura=True
     #VERIFICANDO SE NÃO HÁ NENHUMA PEÇA QUE POSSA SER COMIDA, SE HOUVER, O JOGADOR É OBRIGADO A EXECUTAR O MOVIMENTO DE COMÊ-LA
@@ -145,15 +166,27 @@ def jogada_player1(x):
         y=pode_ser_comida(matriz)
         z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
         if matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
+            valido=True 
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
             valido=True
-        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and (((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)-coluna_final)==(linha_inicio-coluna_inicio))) and z==True:
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
             valido=True
-        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and (((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)+coluna_final)==(linha_inicio+coluna_inicio))) and z==True:
-            valido=True
-        if matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and matriz[linha_final-2][coluna_final-1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and matriz[linha_final+2][coluna_final+1]=="@") and matriz[linha_final][coluna_final]==" ":
+        if matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and (matriz[linha_final-2][coluna_final-1]=="@" or matriz[linha_final-2][coluna_final-1]=="&") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and (matriz[linha_final+2][coluna_final+1]=="@" or matriz[linha_final+2][coluna_final+1]=="&")) and matriz[linha_final][coluna_final]==" ":
             valido=True
             captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and matriz[linha_final-2][coluna_final+1]=="@" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and matriz[linha_final+2][coluna_final-1]=="@") and matriz[linha_final][coluna_final]==" ":
+        elif matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and (matriz[linha_final-2][coluna_final+1]=="@" or matriz[linha_final-2][coluna_final+1]=="&") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and (matriz[linha_final+2][coluna_final-1]=="@" or matriz[linha_final+2][coluna_final-1]=="&")) and matriz[linha_final][coluna_final]==" ":
+            valido=True
+            captura=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="@" or matriz[linha_final+2][coluna_final+1]=="&") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+            valido=True
+            captura=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="@" or matriz[linha_final-2][coluna_final-1]=="&") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+            valido=True
+            captura=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio) and (matriz[linha_final-2][coluna_final+1]=="@" or matriz[linha_final-2][coluna_final+1]=="&") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True):
+            valido=True
+            captura=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio) and (matriz[linha_final+2][coluna_final-1]=="@" or matriz[linha_final+2][coluna_final-1]=="&") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True):                                                                                        
             valido=True
             captura=True
         if y==True and matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
@@ -164,14 +197,18 @@ def jogada_player1(x):
     matriz[linha_final][coluna_final]=aux
     if captura==True:
         #SE O MOVIMENTO FOR DE CAPTURA, ALÉM DE MOVER A PEÇA, APAGA-SE A PEÇA QUE FOI COMIDA.
-        if coluna_final==coluna_inicio+2:
+        if coluna_final>coluna_inicio and linha_final>linha_inicio:
             coluna_captura=coluna_final-1
-        elif coluna_final==coluna_inicio-2:
-            coluna_captura=coluna_final+1
-        if linha_final==linha_inicio+4:
             linha_captura=linha_final-2
-        elif linha_final==linha_inicio-4:
+        elif coluna_final<coluna_inicio and linha_final<linha_inicio:
+            coluna_captura=coluna_final+1
             linha_captura=linha_final+2
+        elif coluna_final>coluna_inicio and linha_final<linha_inicio:
+            coluna_captura=coluna_final-1
+            linha_captura=linha_final+2
+        elif coluna_final<coluna_inicio and linha_final>linha_inicio:
+            coluna_captura=coluna_final+1
+            linha_captura=linha_final-2
         matriz[linha_captura][coluna_captura]=" "
         print_tabuleiro(matriz)
         print("Você comeu uma peça! Jogue novamente.")
@@ -191,20 +228,32 @@ def jogada_player2(x):
     captura=False
     y=pode_ser_comida(matriz)
     z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
-    if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1)))  and matriz[linha_final][coluna_final]==" ":
+    if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
+        valido=True 
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
         valido=True
-    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and (((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)-coluna_final)==(linha_inicio-coluna_inicio))) and z==True:
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
         valido=True
-    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and (((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)+coluna_final)==(linha_inicio+coluna_inicio))) and z==True:
-        valido=True
-    if matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and matriz[linha_final-2][coluna_final-1]=="o" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and matriz[linha_final+2][coluna_final+1]=="o") and matriz[linha_final][coluna_final]==" ":
-        valido=True
-        captura=True  
-    elif matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and matriz[linha_final-2][coluna_final+1]=="o" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and matriz[linha_final+2][coluna_final-1]=="o") and matriz[linha_final][coluna_final]==" ":
+    if matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O")) and matriz[linha_final][coluna_final]==" ":
         valido=True
         captura=True
-    if y==True and matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
-            valido=False
+    elif matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and (matriz[linha_final-2][coluna_final+1]=="o" or matriz[linha_final-2][coluna_final+1]=="O") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and (matriz[linha_final+2][coluna_final-1]=="o" or matriz[linha_final+2][coluna_final-1]=="O")) and matriz[linha_final][coluna_final]==" ":
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio) and (matriz[linha_final-2][coluna_final+1]=="o" or matriz[linha_final-2][coluna_final+1]=="O") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True):
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio) and (matriz[linha_final+2][coluna_final-1]=="o" or matriz[linha_final+2][coluna_final-1]=="O") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True):                                                                                        
+        valido=True
+        captura=True
+    if y==True and matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
+        valido=False
     while valido==False:
         print("Jogada inválida, por favor, tente novamente")
         matriz=x
@@ -219,16 +268,28 @@ def jogada_player2(x):
         captura=False
         y=pode_ser_comida(matriz)
         z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
-        if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1)))  and matriz[linha_final][coluna_final]==" ":
-            valido= True
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and (((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)-coluna_final)==(linha_inicio-coluna_inicio))) and z==True:
+        if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
+            valido=True 
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
             valido=True
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and (((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio))or((linha_final+(coluna_final-coluna_inicio)+coluna_final)==(linha_inicio+coluna_inicio))) and z==True:
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
             valido=True
-        if matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and matriz[linha_final-2][coluna_final-1]=="o" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and matriz[linha_final+2][coluna_final+1]=="o") and matriz[linha_final][coluna_final]==" ":
+        if matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O")) and matriz[linha_final][coluna_final]==" ":
             valido=True
             captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and matriz[linha_final-2][coluna_final+1]=="o" or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and matriz[linha_final+2][coluna_final-1]=="o") and matriz[linha_final][coluna_final]==" ":
+        elif matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and (matriz[linha_final-2][coluna_final+1]=="o" or matriz[linha_final-2][coluna_final+1]=="O") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and (matriz[linha_final+2][coluna_final-1]=="o" or matriz[linha_final+2][coluna_final-1]=="O")) and matriz[linha_final][coluna_final]==" ":
+            valido=True
+            captura=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+            valido=True
+            captura=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+            valido=True
+            captura=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio) and (matriz[linha_final-2][coluna_final+1]=="o" or matriz[linha_final-2][coluna_final+1]=="O") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True):
+            valido=True
+            captura=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio) and (matriz[linha_final+2][coluna_final-1]=="o" or matriz[linha_final+2][coluna_final-1]=="O") and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True):                                                                                        
             valido=True
             captura=True
         if y==True and matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
@@ -237,15 +298,19 @@ def jogada_player2(x):
     matriz[linha_inicio][coluna_inicio]=matriz[linha_final][coluna_final]
     matriz[linha_final][coluna_final]=aux
     if captura==True:
-        if coluna_final==coluna_inicio+2:
-            coluna_capturada=coluna_final-1
-        elif coluna_final==coluna_inicio-2:
-            coluna_capturada=coluna_final+1
-        if linha_final==linha_inicio+4:
-            linha_capturada=linha_final-2
-        elif linha_final==linha_inicio-4:
-            linha_capturada=linha_final+2
-        matriz[linha_capturada][coluna_capturada]=" "
+        if coluna_final>coluna_inicio and linha_final>linha_inicio:
+            coluna_captura=coluna_final-1
+            linha_captura=linha_final-2
+        elif coluna_final<coluna_inicio and linha_final<linha_inicio:
+            coluna_captura=coluna_final+1
+            linha_captura=linha_final+2
+        elif coluna_final>coluna_inicio and linha_final<linha_inicio:
+            coluna_captura=coluna_final-1
+            linha_captura=linha_final+2
+        elif coluna_final<coluna_inicio and linha_final>linha_inicio:
+            coluna_captura=coluna_final+1
+            linha_captura=linha_final-2
+        matriz[linha_captura][coluna_captura]=" "
         print_tabuleiro(matriz)
         print("Você comeu uma peça! Jogue novamente.")
         jogada_player2(matriz)
