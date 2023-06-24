@@ -525,6 +525,7 @@ if jogador=="C":
             matriz=eh_dama(matriz)
             
             print_tabuleiro(matriz)
+            print("Você já comeu: ",quantidade_de_peças2, "peças do jogador adversário.")
         if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE BAIXO, O JOGADOR 2
             matriz=jogada_player2(matriz)
 
@@ -532,6 +533,7 @@ if jogador=="C":
             matriz=eh_dama(matriz)
 
             print_tabuleiro(matriz)
+            print("Você já comeu: ",quantidade_de_peças2, "peças do jogador adversário.")
         if quantidade_de_peças2 == 0:
             jogo = False
             vencedor = "Jogador 1 venceu."
@@ -546,12 +548,14 @@ elif jogador=="B":
             matriz=eh_dama(matriz)
 
             print_tabuleiro(matriz)
+            print("Você já comeu: ",quantidade_de_peças1, "peças do jogador adversário.")
         if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE CIMA, O JOGADOR 1
             matriz=jogada_player1(matriz)
 
             matriz=eh_dama(matriz)
 
             print_tabuleiro(matriz)
+            print("Você já comeu: ",quantidade_de_peças1, "peças do jogador adversário.")
         if quantidade_de_peças1 == 0:
             jogo = False
             vencedor = "Jogador 2 venceu."
