@@ -33,11 +33,11 @@ def tabuleiro_inicio():
             
             #COLOCANDO AS PEÇAS "o"
             if 0<i<7 and ((i%4!=0 and j%2==0) or (i%4==0 and j%2==1)) and 0<j<11:
-                matriz[i][j]="o"
+                matriz[i][j]="O"
 
             #COLOCANDO AS PEÇAS "@"
             if 15<=i<22 and ((i%4!=0 and j%2==0) or (i%4==0 and j%2==1)) and 0<j<11:
-                matriz[i][j]="@"
+                matriz[i][j]="&"
 
             #COLOCANDO, NAS LINHAS VAZIAS, OS ELEMENTOS "-"
             if i%2==1 and (j!=0 or j!=11):
@@ -174,7 +174,8 @@ def dama_ta_livre(m,a,b,c,d):
 #FUNÇÃO QUE FAZ A JOGADA DO PLAYER DAS PEÇAS "o"
 def jogada_player1(x):
     matriz=x
-
+    global quantidade_de_peças2
+    print("Você já comeu: ",15 - quantidade_de_peças2, "peças do jogador adversário.")
     #PEGANDO O INPUT E O DIVIDINDO EM DUAS PARTES, AS CORDENADAS DE INICIO E AS CORDENADAS FINAIS
     entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
@@ -330,7 +331,6 @@ def jogada_player1(x):
 
         #POR FIM, APAGA-SE O ELEMENTO QUE ESTAVA NAS CORDENADAS DE CAPTURA
         matriz[linha_captura][coluna_captura]=" "
-        global quantidade_de_peças2 
         quantidade_de_peças2 = quantidade_de_peças2 - 1
         #SE UMA PEÇA FOI CAPTURADA, A FUNÇÃO É EXECUTADA NOVAMENTE
         print_tabuleiro(matriz)
@@ -340,7 +340,8 @@ def jogada_player1(x):
     return matriz
 
 def jogada_player2(x):
-
+    global quantidade_de_peças1 
+    print("Você já comeu: ",15 - quantidade_de_peças1, "peças do jogador adversário.")
     #FUNÇÃO IGUAL A PRIMEIRA, PORÉM PARA O SEGUNDO JOGADOR, O CÓDIGO FOI FEITO ASSIM PARA MELHOR ORGANIZAÇÃO
     matriz=x
 
@@ -484,7 +485,6 @@ def jogada_player2(x):
             linha_captura=linha_final-2
         
         matriz[linha_captura][coluna_captura]=" "
-        global quantidade_de_peças1 
         quantidade_de_peças1= quantidade_de_peças1 - 1
         print_tabuleiro(matriz)
         print("Você comeu uma peça! Jogue novamente.")
@@ -525,7 +525,6 @@ if jogador=="C":
             matriz=eh_dama(matriz)
             
             print_tabuleiro(matriz)
-            print("Você já comeu: ",15- quantidade_de_peças2, "peças do jogador adversário.")
         if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE BAIXO, O JOGADOR 2
             matriz=jogada_player2(matriz)
 
@@ -533,7 +532,6 @@ if jogador=="C":
             matriz=eh_dama(matriz)
 
             print_tabuleiro(matriz)
-            print("Você já comeu: ",15 - quantidade_de_peças2, "peças do jogador adversário.")
         if quantidade_de_peças2 == 0:
             jogo = False
             vencedor = "Jogador 1 venceu."
@@ -548,14 +546,12 @@ elif jogador=="B":
             matriz=eh_dama(matriz)
 
             print_tabuleiro(matriz)
-            print("Você já comeu: ",15 - quantidade_de_peças1, "peças do jogador adversário.")
         if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE CIMA, O JOGADOR 1
             matriz=jogada_player1(matriz)
 
             matriz=eh_dama(matriz)
 
             print_tabuleiro(matriz)
-            print("Você já comeu: ",15 - quantidade_de_peças1, "peças do jogador adversário.")
         if quantidade_de_peças1 == 0:
             jogo = False
             vencedor = "Jogador 2 venceu."
