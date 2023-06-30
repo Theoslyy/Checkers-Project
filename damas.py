@@ -297,7 +297,7 @@ def dama_pode_comer1(matriz):
 
     for i in range(23):
         for j in range(12):
-            if tem_comida_no_caminho1(matriz,i,j)==True:
+            if matriz[i][j]=="O" and tem_comida_no_caminho1(matriz,i,j)==True:
                 pode_comer=True
                 break
         break
@@ -310,7 +310,7 @@ def dama_pode_comer2(matriz):
 
     for i in range(23):
         for j in range(12):
-            if tem_comida_no_caminho2(matriz,i,j)==True:
+            if matriz[i][j]=="&" and tem_comida_no_caminho2(matriz,i,j)==True:
                 pode_comer=True
                 break
         break
