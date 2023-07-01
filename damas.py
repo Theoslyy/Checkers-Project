@@ -3,6 +3,8 @@ import numpy as np
 import os
 clear = lambda: os.system('clear') #CRIAMOS UMA VARIÁVEL CLEAR PARA LIMPAR O TERMINAL A CADA JOGADA
 
+#AINDA ESTOU MEXENDO NO CÓDIGO, MAS O THEO PEDIU PRA MANDAR O QUE JÁ TINHA FEITO
+
 quantidade_de_movimentos = 0
 quantidade_de_peças1 = 15
 quantidade_de_peças2 = 15
@@ -183,27 +185,43 @@ def jogada_player1(x):
     matriz=x
     global quantidade_de_peças2
     print("Você já comeu: ",15 - quantidade_de_peças2, "peças do jogador adversário.")
-    #PEGANDO O INPUT E O DIVIDINDO EM DUAS PARTES, AS CORDENADAS DE INICIO E AS CORDENADAS FINAIS
-    entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-    #AS CORDENADAS INICIAIS SÃO A PRIMEIRA PARTE DO INPUT, ELAS SÃO DIVIDIAS NOVAMENTE, OBTENDO DOIS ELEMENTOS
-    cordenadas_inicio=converter(entrada[0])
+    try:
+        #PEGANDO O INPUT E O DIVIDINDO EM DUAS PARTES, AS CORDENADAS DE INICIO E AS CORDENADAS FINAIS
+        entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-    #O PRIMEIRO ELEMENTO É A COLUNA, QUE PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
-    #PEGAMOS O CÓDIGO ASCII DA LETRA E SUBTRAÍMOS 64, OBTENDO O NÚMERO CORRESPONDENTE AO ÍNDICE
-    coluna_inicio=(ord(cordenadas_inicio[0])-64)
+        #AS CORDENADAS INICIAIS SÃO A PRIMEIRA PARTE DO INPUT, ELAS SÃO DIVIDIAS NOVAMENTE, OBTENDO DOIS ELEMENTOS
+        cordenadas_inicio=converter(entrada[0])
 
-    #O SEGUNDO ELEMENTO É A LINHA, QUE TAMBÉM PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
-    #MULTIPLICAMOS O ÍNDICE POR 2 E SOMAMOS O RESULTADO COM 2, OBTENDO UM NÚMERO CORRESPONDENTE AO ÍNDICE
-    linha_inicio=(int(cordenadas_inicio[1])*2+2)
+        #O PRIMEIRO ELEMENTO É A COLUNA, QUE PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
+        #PEGAMOS O CÓDIGO ASCII DA LETRA E SUBTRAÍMOS 64, OBTENDO O NÚMERO CORRESPONDENTE AO ÍNDICE
+        coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-    #O MESMO PROCESSO É FEITO PARA AS CORDENADAS FINAIS, QUE SÃO A SEGUNDA PARTE DO INPUT ORIGINAL
-    cordenadas_final=converter(entrada[1])
+        #O SEGUNDO ELEMENTO É A LINHA, QUE TAMBÉM PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
+        #MULTIPLICAMOS O ÍNDICE POR 2 E SOMAMOS O RESULTADO COM 2, OBTENDO UM NÚMERO CORRESPONDENTE AO ÍNDICE
+        linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-    coluna_final=(ord(cordenadas_final[0])-64)
+        #O MESMO PROCESSO É FEITO PARA AS CORDENADAS FINAIS, QUE SÃO A SEGUNDA PARTE DO INPUT ORIGINAL
+        cordenadas_final=converter(entrada[1])
 
-    linha_final=(int(cordenadas_final[1])*2+2)
+        coluna_final=(ord(cordenadas_final[0])-64)
 
+        linha_final=(int(cordenadas_final[1])*2+2)
+
+    except ValueError:
+        entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+
+        cordenadas_inicio=converter(entrada[0])
+
+        coluna_inicio=(ord(cordenadas_inicio[0])-64)
+
+        linha_inicio=(int(cordenadas_inicio[1])*2+2)
+
+        cordenadas_final=converter(entrada[1])
+
+        coluna_final=(ord(cordenadas_final[0])-64)
+
+        linha_final=(int(cordenadas_final[1])*2+2)
     #ESSA VARIÁVEL FICA ATIVA SE UM MOVIMENTO É VÁLIDO
     valido=False
 
@@ -354,18 +372,33 @@ def jogada_player2(x):
     #FUNÇÃO IGUAL A PRIMEIRA, PORÉM PARA O SEGUNDO JOGADOR, O CÓDIGO FOI FEITO ASSIM PARA MELHOR ORGANIZAÇÃO
     matriz=x
 
-    entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
-    cordenadas_inicio=converter(entrada[0])
+    try:
+        entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+        cordenadas_inicio=converter(entrada[0])
 
-    coluna_inicio=(ord(cordenadas_inicio[0])-64)
+        coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-    linha_inicio=(int(cordenadas_inicio[1])*2+2)
+        linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-    cordenadas_final=converter(entrada[1])
+        cordenadas_final=converter(entrada[1])
 
-    coluna_final=(ord(cordenadas_final[0])-64)
+        coluna_final=(ord(cordenadas_final[0])-64)
 
-    linha_final=(int(cordenadas_final[1])*2+2)
+        linha_final=(int(cordenadas_final[1])*2+2)
+    
+    except RuntimeError:
+        entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+        cordenadas_inicio=converter(entrada[0])
+
+        coluna_inicio=(ord(cordenadas_inicio[0])-64)
+
+        linha_inicio=(int(cordenadas_inicio[1])*2+2)
+
+        cordenadas_final=converter(entrada[1])
+
+        coluna_final=(ord(cordenadas_final[0])-64)
+
+        linha_final=(int(cordenadas_final[1])*2+2)
 
     valido=False
     captura=False
