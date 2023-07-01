@@ -185,43 +185,32 @@ def jogada_player1(x):
     matriz=x
     global quantidade_de_peças2
     print("Você já comeu: ",15 - quantidade_de_peças2, "peças do jogador adversário.")
+    while True:
+        try:
+            #PEGANDO O INPUT E O DIVIDINDO EM DUAS PARTES, AS CORDENADAS DE INICIO E AS CORDENADAS FINAIS
+            entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-    try:
-        #PEGANDO O INPUT E O DIVIDINDO EM DUAS PARTES, AS CORDENADAS DE INICIO E AS CORDENADAS FINAIS
-        entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+            #AS CORDENADAS INICIAIS SÃO A PRIMEIRA PARTE DO INPUT, ELAS SÃO DIVIDIAS NOVAMENTE, OBTENDO DOIS ELEMENTOS
+            cordenadas_inicio=converter(entrada[0])
 
-        #AS CORDENADAS INICIAIS SÃO A PRIMEIRA PARTE DO INPUT, ELAS SÃO DIVIDIAS NOVAMENTE, OBTENDO DOIS ELEMENTOS
-        cordenadas_inicio=converter(entrada[0])
+            #O PRIMEIRO ELEMENTO É A COLUNA, QUE PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
+            #PEGAMOS O CÓDIGO ASCII DA LETRA E SUBTRAÍMOS 64, OBTENDO O NÚMERO CORRESPONDENTE AO ÍNDICE
+            coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-        #O PRIMEIRO ELEMENTO É A COLUNA, QUE PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
-        #PEGAMOS O CÓDIGO ASCII DA LETRA E SUBTRAÍMOS 64, OBTENDO O NÚMERO CORRESPONDENTE AO ÍNDICE
-        coluna_inicio=(ord(cordenadas_inicio[0])-64)
+            #O SEGUNDO ELEMENTO É A LINHA, QUE TAMBÉM PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
+            #MULTIPLICAMOS O ÍNDICE POR 2 E SOMAMOS O RESULTADO COM 2, OBTENDO UM NÚMERO CORRESPONDENTE AO ÍNDICE
+            linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-        #O SEGUNDO ELEMENTO É A LINHA, QUE TAMBÉM PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
-        #MULTIPLICAMOS O ÍNDICE POR 2 E SOMAMOS O RESULTADO COM 2, OBTENDO UM NÚMERO CORRESPONDENTE AO ÍNDICE
-        linha_inicio=(int(cordenadas_inicio[1])*2+2)
+            #O MESMO PROCESSO É FEITO PARA AS CORDENADAS FINAIS, QUE SÃO A SEGUNDA PARTE DO INPUT ORIGINAL
+            cordenadas_final=converter(entrada[1])
 
-        #O MESMO PROCESSO É FEITO PARA AS CORDENADAS FINAIS, QUE SÃO A SEGUNDA PARTE DO INPUT ORIGINAL
-        cordenadas_final=converter(entrada[1])
+            coluna_final=(ord(cordenadas_final[0])-64)
 
-        coluna_final=(ord(cordenadas_final[0])-64)
-
-        linha_final=(int(cordenadas_final[1])*2+2)
-
-    except ValueError:
-        entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
-
-        cordenadas_inicio=converter(entrada[0])
-
-        coluna_inicio=(ord(cordenadas_inicio[0])-64)
-
-        linha_inicio=(int(cordenadas_inicio[1])*2+2)
-
-        cordenadas_final=converter(entrada[1])
-
-        coluna_final=(ord(cordenadas_final[0])-64)
-
-        linha_final=(int(cordenadas_final[1])*2+2)
+            linha_final=(int(cordenadas_final[1])*2+2)
+            
+            break
+        except (IndexError, ValueError):
+            print("Insira uma entrada válida!")
     #ESSA VARIÁVEL FICA ATIVA SE UM MOVIMENTO É VÁLIDO
     valido=False
 
@@ -277,19 +266,25 @@ def jogada_player1(x):
 
         matriz=x
 
-        entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+        while True:
+            try:
+                entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-        cordenadas_inicio=converter(entrada[0])
+                cordenadas_inicio=converter(entrada[0])
 
-        coluna_inicio=(ord(cordenadas_inicio[0])-64)
+                coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-        linha_inicio=(int(cordenadas_inicio[1])*2+2)
+                linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-        cordenadas_final=converter(entrada[1])
+                cordenadas_final=converter(entrada[1])
 
-        coluna_final=(ord(cordenadas_final[0])-64)
+                coluna_final=(ord(cordenadas_final[0])-64)
 
-        linha_final=(int(cordenadas_final[1])*2+2)
+                linha_final=(int(cordenadas_final[1])*2+2)
+
+                break
+            except (IndexError, ValueError):
+                print("Insira uma entrada válida!")
 
         valido=False
         captura=False
@@ -372,33 +367,24 @@ def jogada_player2(x):
     #FUNÇÃO IGUAL A PRIMEIRA, PORÉM PARA O SEGUNDO JOGADOR, O CÓDIGO FOI FEITO ASSIM PARA MELHOR ORGANIZAÇÃO
     matriz=x
 
-    try:
-        entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
-        cordenadas_inicio=converter(entrada[0])
+    while True:
+        try:
+            entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+            cordenadas_inicio=converter(entrada[0])
 
-        coluna_inicio=(ord(cordenadas_inicio[0])-64)
+            coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-        linha_inicio=(int(cordenadas_inicio[1])*2+2)
+            linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-        cordenadas_final=converter(entrada[1])
+            cordenadas_final=converter(entrada[1])
 
-        coluna_final=(ord(cordenadas_final[0])-64)
+            coluna_final=(ord(cordenadas_final[0])-64)
 
-        linha_final=(int(cordenadas_final[1])*2+2)
-    
-    except RuntimeError:
-        entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
-        cordenadas_inicio=converter(entrada[0])
+            linha_final=(int(cordenadas_final[1])*2+2)
 
-        coluna_inicio=(ord(cordenadas_inicio[0])-64)
-
-        linha_inicio=(int(cordenadas_inicio[1])*2+2)
-
-        cordenadas_final=converter(entrada[1])
-
-        coluna_final=(ord(cordenadas_final[0])-64)
-
-        linha_final=(int(cordenadas_final[1])*2+2)
+            break
+        except (IndexError, ValueError):
+            print("Insira uma entrada válida!")
 
     valido=False
     captura=False
@@ -447,20 +433,25 @@ def jogada_player2(x):
         print("Jogada inválida, por favor, tente novamente")
 
         matriz=x
+        while True:
+            try:
+                entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-        entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+                cordenadas_inicio=converter(entrada[0])
 
-        cordenadas_inicio=converter(entrada[0])
+                coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-        coluna_inicio=(ord(cordenadas_inicio[0])-64)
+                linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-        linha_inicio=(int(cordenadas_inicio[1])*2+2)
+                cordenadas_final=converter(entrada[1])
 
-        cordenadas_final=converter(entrada[1])
+                coluna_final=(ord(cordenadas_final[0])-64)
 
-        coluna_final=(ord(cordenadas_final[0])-64)
+                linha_final=(int(cordenadas_final[1])*2+2)
 
-        linha_final=(int(cordenadas_final[1])*2+2)
+                break
+            except (IndexError, ValueError):
+                print("Insira uma entrada válida!")
 
         valido=False
         captura=False
