@@ -1,18 +1,20 @@
+import sys
+import os
 import numpy as np
+clear = lambda: os.system('clear') #CRIAMOS UMA VARIÁVEL CLEAR PARA LIMPAR O TERMINAL A CADA JOGADA
 quantidade_de_movimentos = 0
 quantidade_de_peças1 = 15
 quantidade_de_peças2 = 15
 jogo = True
 vencedor = None
-#FUNÇÃO PARA CONVERTER STRINGS EM LISTAS
 def converter(string):
-
+    '''FUNÇÃO PARA CONVERTER STRINGS EM LISTAS'''
     x = [i for i in string]
     return x
 
 def tabuleiro_inicio():
 
-    #INICIALIZANDO A MATRIZ, A MATRIZ TEM 23 LINHAS E 12 COLUNAS
+    '''Função para incializar a matriz, a qual tem 23 linhas e 12 colunas'''
     #TAMBÉM FORAM COLOCADAS AS #, ALTERNANDO DE 4 EM 4, DEIXANDO LINHAS VAZIAS, POIS NELAS SERÃO COLOCADOS OS DIVISORES DE LINHAS (+-+-+-+)
     matriz = np.zeros((23,12), dtype=str)
 
@@ -51,9 +53,8 @@ def tabuleiro_inicio():
             elif (j==0 or j==11):
                 matriz[i][j]=" "
     return matriz
-
-#FUNÇÃO QUE PRINTA A MATRIZ QUE FOI DADA A ELA COMO PARÂMETRO
 def print_tabuleiro(x):
+    '''Função que printa a matriz que foi dada a ela como parâmetro'''
     matriz=x
     for i in range(23):
         for j in range(12): 
@@ -71,9 +72,8 @@ def print_tabuleiro(x):
                 print(matriz[i][j], end="|")
         print()
 
-#FUNÇÃO QUE VERIFICA, NA PRIMEIRA E NA ÚLTIMA LINHA, SE A PEÇA É UMA DAMA, SE FOR, ELA É CONVERTIDA
 def eh_dama(x):
-
+    '''Função que verifica, na primeira e na última linha, se a peça é uma dama. Se for, ela é convertida'''
     matriz=x
     for i in range(2,21,18):
         for j in range(12):
@@ -83,9 +83,8 @@ def eh_dama(x):
                 matriz[i][j]="O"
     return x
 
-#FUNÇÃO QUE VERIFICA SE HÁ ALGUMA PEÇA QUE POSSA SER COMIDA, SE SIM, ELA RETORNA UMA BOOLEANA VERDADEIRA
 def pode_ser_comida(x):
-
+    '''Função que verifica se há alguma peça que possa ser comida. Se sim, ela retorna uma booleana verdadeira'''
     matriz=x
     posso_comer=False
     for i in range(2,21):
@@ -123,8 +122,8 @@ def pode_ser_comida(x):
 
     return posso_comer
 
-#FUNÇÃO QUE VERIFICA SE, NO CAMINHO DA DAMA, NÃO EXISTE NENHUMA PEÇA A OBSTRUINDO
 def dama_ta_livre(m,a,b,c,d):
+    '''Função que verifica se, no caminho da dama, não existe nenhuma peça a obstruindo'''
 
     ta_livre=True
 
@@ -172,7 +171,7 @@ def dama_ta_livre(m,a,b,c,d):
     return ta_livre
 
 def tem_comida_no_caminho1(matriz,a,b):
-    
+    '''Função para verificar obrigatoriedade de comer das damas'''
     tem_comida=False
 
     c=a
@@ -236,7 +235,7 @@ def tem_comida_no_caminho1(matriz,a,b):
 
     return tem_comida
 def tem_comida_no_caminho2(matriz,a,b):
-        
+    '''Função para verificar obrigatoriedade de comer das damas'''
     tem_comida=False
 
     c=a
@@ -292,7 +291,7 @@ def tem_comida_no_caminho2(matriz,a,b):
     return tem_comida
 
 def dama_pode_comer1(matriz):
-     
+    '''Função para verificar possibilidade de comer das damas'''
     pode_comer=False
 
     for i in range(23):
@@ -305,7 +304,7 @@ def dama_pode_comer1(matriz):
     return pode_comer
 
 def dama_pode_comer2(matriz):
-     
+    '''Função para verificar possibilidade de comer das damas'''
     pode_comer=False
 
     for i in range(23):
@@ -317,31 +316,35 @@ def dama_pode_comer2(matriz):
     
     return pode_comer
 
-#FUNÇÃO QUE FAZ A JOGADA DO PLAYER DAS PEÇAS "o"
 def jogada_player1(matriz):
+    '''Função que faz a jogada do player das peças "o"'''
     global quantidade_de_peças2
     print("Você já comeu: ",15 - quantidade_de_peças2, "peças do jogador adversário.")
     #PEGANDO O INPUT E O DIVIDINDO EM DUAS PARTES, AS CORDENADAS DE INICIO E AS CORDENADAS FINAIS
-    entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+    while True:
+        try:
+            entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-    #AS CORDENADAS INICIAIS SÃO A PRIMEIRA PARTE DO INPUT, ELAS SÃO DIVIDIAS NOVAMENTE, OBTENDO DOIS ELEMENTOS
-    cordenadas_inicio=converter(entrada[0])
+            #AS CORDENADAS INICIAIS SÃO A PRIMEIRA PARTE DO INPUT, ELAS SÃO DIVIDIAS NOVAMENTE, OBTENDO DOIS ELEMENTOS
+            cordenadas_inicio=converter(entrada[0])
 
-    #O PRIMEIRO ELEMENTO É A COLUNA, QUE PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
-    #PEGAMOS O CÓDIGO ASCII DA LETRA E SUBTRAÍMOS 64, OBTENDO O NÚMERO CORRESPONDENTE AO ÍNDICE
-    coluna_inicio=(ord(cordenadas_inicio[0])-64)
+            #O PRIMEIRO ELEMENTO É A COLUNA, QUE PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
+            #PEGAMOS O CÓDIGO ASCII DA LETRA E SUBTRAÍMOS 64, OBTENDO O NÚMERO CORRESPONDENTE AO ÍNDICE
+            coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-    #O SEGUNDO ELEMENTO É A LINHA, QUE TAMBÉM PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
-    #MULTIPLICAMOS O ÍNDICE POR 2 E SOMAMOS O RESULTADO COM 2, OBTENDO UM NÚMERO CORRESPONDENTE AO ÍNDICE
-    linha_inicio=(int(cordenadas_inicio[1])*2+2)
+            #O SEGUNDO ELEMENTO É A LINHA, QUE TAMBÉM PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
+            #MULTIPLICAMOS O ÍNDICE POR 2 E SOMAMOS O RESULTADO COM 2, OBTENDO UM NÚMERO CORRESPONDENTE AO ÍNDICE
+            linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-    #O MESMO PROCESSO É FEITO PARA AS CORDENADAS FINAIS, QUE SÃO A SEGUNDA PARTE DO INPUT ORIGINAL
-    cordenadas_final=converter(entrada[1])
+            #O MESMO PROCESSO É FEITO PARA AS CORDENADAS FINAIS, QUE SÃO A SEGUNDA PARTE DO INPUT ORIGINAL
+            cordenadas_final=converter(entrada[1])
 
-    coluna_final=(ord(cordenadas_final[0])-64)
+            coluna_final=(ord(cordenadas_final[0])-64)
 
-    linha_final=(int(cordenadas_final[1])*2+2)
-
+            linha_final=(int(cordenadas_final[1])*2+2)
+            break
+        except (IndexError, ValueError):
+            print("Insira uma entrada válida!")
     #ESSA VARIÁVEL FICA ATIVA SE UM MOVIMENTO É VÁLIDO
     valido=False
 
@@ -387,7 +390,7 @@ def jogada_player1(matriz):
         valido=True
         captura=True
 
-    
+
     #VERIFICANDO SE NÃO HÁ NENHUMA PEÇA QUE POSSA SER COMIDA, SE HOUVER, O JOGADOR É OBRIGADO A EXECUTAR O MOVIMENTO DE COMÊ-LA
     if (y==True or x==True) and captura==False:
         valido=False
@@ -448,8 +451,6 @@ def jogada_player1(matriz):
         
         if (x==True or y==True) and captura==False:
             valido=False
-    
-
     #PARA EXECUTAR O MOVIMENTO O MOVIMENTO, TROCA-SE DE LUGAR O ELEMENTOS DAS CORDENADAS INICIAIS COM O ELEMENTO DAS CORDENADAS FINAIS
     aux=matriz[linha_inicio][coluna_inicio]
     matriz[linha_inicio][coluna_inicio]=matriz[linha_final][coluna_final]
@@ -488,21 +489,24 @@ def jogada_player1(matriz):
 def jogada_player2(matriz):
     global quantidade_de_peças1 
     print("Você já comeu: ",15 - quantidade_de_peças1, "peças do jogador adversário.")
-    #FUNÇÃO IGUAL A PRIMEIRA, PORÉM PARA O SEGUNDO JOGADOR, O CÓDIGO FOI FEITO ASSIM PARA MELHOR ORGANIZAÇÃO
+    '''Função que faz a jogada do player das peças "@"'''
+    while True:
+        try:
+            entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+            cordenadas_inicio=converter(entrada[0])
 
-    entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
-    cordenadas_inicio=converter(entrada[0])
+            coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-    coluna_inicio=(ord(cordenadas_inicio[0])-64)
+            linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-    linha_inicio=(int(cordenadas_inicio[1])*2+2)
+            cordenadas_final=converter(entrada[1])
 
-    cordenadas_final=converter(entrada[1])
+            coluna_final=(ord(cordenadas_final[0])-64)
 
-    coluna_final=(ord(cordenadas_final[0])-64)
-
-    linha_final=(int(cordenadas_final[1])*2+2)
-
+            linha_final=(int(cordenadas_final[1])*2+2)
+            break
+        except (ValueError,IndexError):
+            print("Insira uma entrada válida!")
     valido=False
     captura=False
 
@@ -638,68 +642,73 @@ def jogada_player2(matriz):
         jogada_player2(matriz)
     
     return matriz
+#AQUI TENTAMOS INICIAR O JOGO COM O ARQUIVO, CASO DÊ CERTO ELE ABRE O MODO OFFLINE, CASO CONTRÁRIO ELE ABRE O MODO MULTIJOGADOR
+try:
+    entrada = sys.argv[1]
+    entrada = open(entrada, "w+r")
+except IndexError:
+    clear()
+    #print("Vamos jogar damas!")
+    #print_tabuleiro(tabuleiro_inicio())
+    #acabou=False
+    #pecas1=pecas2=15
+    turno=0
+    #while acabou==False:
+    print("O tabuleiro inicial é:")
 
-#print("Vamos jogar damas!")
-#print_tabuleiro(tabuleiro_inicio())
-#acabou=False
-#pecas1=pecas2=15
-turno=0
-#while acabou==False:
-print("O tabuleiro inicial é:")
+    #É PRINTADO O TABULEIRO INICIAL
+    print_tabuleiro(tabuleiro_inicio())
 
-#É PRINTADO O TABULEIRO INICIAL
-print_tabuleiro(tabuleiro_inicio())
-
-#É CRIADA UMA VARIÁVEL "MATRIZ" QUE RECEBERÁ O TABULEIRO
-matriz=(tabuleiro_inicio())
-#USUÁRIO ENTRA O CARACTERE "C" OU "B"
-jogador=input("Quem vai começar o jogo (C ou B):\n")
-
-while jogador!="C" and jogador!="B":
-
-    #SE A ENTRADA NÃO FOR C OU B, O PROGRAMA PEDE POR UMA NOVA ENTRADA
-    print("Entrada inválida, por favor, tente novamente")
+    #É CRIADA UMA VARIÁVEL "MATRIZ" QUE RECEBERÁ O TABULEIRO
+    matriz=(tabuleiro_inicio())
+    #USUÁRIO ENTRA O CARACTERE "C" OU "B"
     jogador=input("Quem vai começar o jogo (C ou B):\n")
 
-if jogador=="C":
-    print("Ok, jogador de cima começa!")
+    while jogador!="C" and jogador!="B":
 
-    while jogo == True:
-        if turno%2==0: #COMO O TURNO COMEÇA COM 0, ENTÃO AS JOGADAS PARES SERÃO DO JOGADOR 1 (O JOGADOR DE CIMA)
-            matriz=jogada_player1(matriz)
+        #SE A ENTRADA NÃO FOR C OU B, O PROGRAMA PEDE POR UMA NOVA ENTRADA
+        print("Entrada inválida, por favor, tente novamente")
+        jogador=input("Quem vai começar o jogo (C ou B):\n")
 
-            #CHECANDO SE NÃO HÁ POSSÍVEIS DAMAS
-            matriz=eh_dama(matriz)
-            
-            print_tabuleiro(matriz)
-        if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE BAIXO, O JOGADOR 2
-            matriz=jogada_player2(matriz)
+    if jogador=="C":
+        print("Ok, jogador de cima começa!")
 
-            #CHECANDO SE NÃO HÁ POSSÍVEIS DAMAS
-            matriz=eh_dama(matriz)
+        while jogo == True:
+            if turno%2==0: #COMO O TURNO COMEÇA COM 0, ENTÃO AS JOGADAS PARES SERÃO DO JOGADOR 1 (O JOGADOR DE CIMA)
+                matriz=jogada_player1(matriz)
 
-            print_tabuleiro(matriz)
-        if quantidade_de_peças2 == 0:
-            jogo = False
-            vencedor = "Jogador 1 venceu."
-        turno+=1
+                #CHECANDO SE NÃO HÁ POSSÍVEIS DAMAS
+                matriz=eh_dama(matriz)
+                
+                print_tabuleiro(matriz)
+            if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE BAIXO, O JOGADOR 2
+                matriz=jogada_player2(matriz)
 
-elif jogador=="B":
-    print("Ok, jogador de baixo começa!")
-    while jogo == True:
-        if turno%2==0: #COMO O TURNO COMEÇA COM 0, ENTÃO AS JOGADAS PARES SERÃO DO JOGADOR 2 (O JOGADOR DE BAIXO)
-            matriz=jogada_player2(matriz)
+                #CHECANDO SE NÃO HÁ POSSÍVEIS DAMAS
+                matriz=eh_dama(matriz)
 
-            matriz=eh_dama(matriz)
+                print_tabuleiro(matriz)
+            if quantidade_de_peças2 == 0:
+                jogo = False
+                vencedor = "Jogador 1 venceu."
+            turno+=1
 
-            print_tabuleiro(matriz)
-        if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE CIMA, O JOGADOR 1
-            matriz=jogada_player1(matriz)
+    elif jogador=="B":
+        print("Ok, jogador de baixo começa!")
+        while jogo == True:
+            if turno%2==0: #COMO O TURNO COMEÇA COM 0, ENTÃO AS JOGADAS PARES SERÃO DO JOGADOR 2 (O JOGADOR DE BAIXO)
+                matriz=jogada_player2(matriz)
 
-            matriz=eh_dama(matriz)
+                matriz=eh_dama(matriz)
 
-            print_tabuleiro(matriz)
-        if quantidade_de_peças1 == 0:
-            jogo = False
-            vencedor = "Jogador 2 venceu."
-        turno+=1
+                print_tabuleiro(matriz)
+            if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE CIMA, O JOGADOR 1
+                matriz=jogada_player1(matriz)
+
+                matriz=eh_dama(matriz)
+
+                print_tabuleiro(matriz)
+            if quantidade_de_peças1 == 0:
+                jogo = False
+                vencedor = "Jogador 2 venceu."
+            turno+=1
