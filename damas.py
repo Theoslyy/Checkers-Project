@@ -83,28 +83,35 @@ def eh_dama(x):
                 matriz[i][j]="O"
     return x
 
-def pode_ser_comida(x):
-    '''Função que verifica se há alguma peça que possa ser comida. Se sim, ela retorna uma booleana verdadeira'''
+    #É VERIFICADO SE A PEÇA PODE SER CAPTURADA, VERIFICA-SE SE EXISTE UMA PEÇA OPOSTA DE UM LADO E UM ESPAÇO VAZIO NO OUTRO
+def pode_ser_comida2(x):
+
     matriz=x
     posso_comer=False
     for i in range(2,21):
         for j in range(12):
 
-            #É VERIFICADO SE A PEÇA PODE SER CAPTURADA, VERIFICA-SE SE EXISTE UMA PEÇA OPOSTA DE UM LADO E UM ESPAÇO VAZIO NO OUTRO
             if matriz[i][j]=="o" or matriz[i][j]=="O":
 
                 if (matriz[i-2][j-1]=="@" and matriz[i+2][j+1]==" "):
                     posso_comer=True
-                
+                            
                 if matriz[i+2][j+1]=="@" and matriz[i-2][j-1]==" ":
                     posso_comer=True
-                
+                            
                 if matriz[i-2][j+1]=="@" and matriz[i+2][j-1]==" ":
                     posso_comer=True
-                
+                            
                 if matriz[i+2][j-1]=="@" and matriz[i-2][j+1]==" ":
                     posso_comer=True
+    return posso_comer
 
+def pode_ser_comida1(x):
+            
+    matriz=x
+    posso_comer=False
+    for i in range(2,21):
+        for j in range(12):
             #O MESMO CÓDIGO É REPETIDO, PORÉM AGORA VERIFICANDO SE EXITE ALGUMA PEÇA "@" OU "&" QUE PODE SER COMIDA
             if matriz[i][j]=="@" or matriz[i][j]=="&":
 
@@ -353,7 +360,7 @@ def jogada_player1(matriz):
 
     #AS DUAS PRÓXIMAS VARIÁVEIS RECEBEM FUNÇÕES JÁ EXPLICADAS
     x=dama_pode_comer1(matriz)
-    y=pode_ser_comida(matriz)
+    y=pode_ser_comida1(matriz)
     z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
     #VERIFICANDO SE O MOVIMENTO É VÁLIDO
     #SEGUEM UMA SEQUENCIA DE IF E ELIFS QUE VÃO CHECANDO AS CONDIÇÕES PARA TODOS OS TIPOS DE MOVIMENTO, SE TODAS ELAS FOREM ACEITAS, A VARIÁVEL "VALIDO", SERA VERDADEIRA
@@ -418,7 +425,7 @@ def jogada_player1(matriz):
         captura=False
 
         x=dama_pode_comer1(matriz)
-        y=pode_ser_comida(matriz)
+        y=pode_ser_comida1(matriz)
         z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
 
         if matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
@@ -511,7 +518,7 @@ def jogada_player2(matriz):
     captura=False
 
     x=dama_pode_comer2(matriz)
-    y=pode_ser_comida(matriz)
+    y=pode_ser_comida2(matriz)
     z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
 
     #MOVIMENTO NORMAL DE PEÇA NORMAL
@@ -573,7 +580,7 @@ def jogada_player2(matriz):
         captura=False
 
         x=dama_pode_comer2(matriz)
-        y=pode_ser_comida(matriz)
+        y=pode_ser_comida2(matriz)
         z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
 
         #MOVIMENTO NORMAL DE UMA PEÇA NORMAL
@@ -651,6 +658,7 @@ except IndexError:
     #print("Vamos jogar damas!")
     #print_tabuleiro(tabuleiro_inicio())
     #acabou=False
+
     #pecas1=pecas2=15
     turno=0
     #while acabou==False:
