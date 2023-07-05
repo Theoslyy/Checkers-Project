@@ -7,6 +7,9 @@ quantidade_de_peças1 = 15
 quantidade_de_peças2 = 15
 jogo = True
 vencedor = None
+modoOffline = False
+jogadasLista = []
+jogaCima=bool
 def converter(string):
     '''FUNÇÃO PARA CONVERTER STRINGS EM LISTAS'''
     x = [i for i in string]
@@ -83,9 +86,9 @@ def eh_dama(x):
                 matriz[i][j]="O"
     return x
 
-    #É VERIFICADO SE A PEÇA PODE SER CAPTURADA, VERIFICA-SE SE EXISTE UMA PEÇA OPOSTA DE UM LADO E UM ESPAÇO VAZIO NO OUTRO
-def pode_ser_comida2(x):
 
+def pode_ser_comida2(x):
+    '''É verificado se a peça do tipo "o" pode ser capturada, verifica-se se existe uma peça oposta de um lado e um espaço vazio no outro'''
     matriz=x
     posso_comer=False
     for i in range(2,21):
@@ -107,7 +110,7 @@ def pode_ser_comida2(x):
     return posso_comer
 
 def pode_ser_comida1(x):
-            
+    '''É verificado se a peça do tipo "@" pode ser capturada, verifica-se se existe uma peça oposta de um lado e um espaço vazio no outro'''
     matriz=x
     posso_comer=False
     for i in range(2,21):
@@ -326,8 +329,9 @@ def dama_pode_comer2(matriz):
 def jogada_player1(matriz):
     '''Função que faz a jogada do player das peças "o"'''
     global quantidade_de_peças2
-    print("Você já comeu: ",15 - quantidade_de_peças2, "peças do jogador adversário.") if modoOffline==False else None
+    print("Você já comeu: ",15 - quantidade_de_peças2, "peças do jogador adversário.")
     #PEGANDO O INPUT E O DIVIDINDO EM DUAS PARTES, AS CORDENADAS DE INICIO E AS CORDENADAS FINAIS
+    global modoOffline
     if modoOffline: #SE A VARIÁVEL modoOffline FOR VERDADEIRA, ENTÃO OS COMANDOS DE JOGADA SERÃO OS DO ARQUIVO
         entrada=jogadasLista[0].split("--")
 
@@ -417,29 +421,24 @@ def jogada_player1(matriz):
     if (y==True or x==True) and captura==False:
         valido=False
 
-    while valido==False and modoOffline==False:
+    while valido==False:
         print("Jogada inválida, por favor, tente novamente")
         #SE O MOVIMENTO NÃO FOR VÁLIDO, O CÓDIGO SE REPETE
 
-        while True:
-                try:
-                    entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-                    cordenadas_inicio=converter(entrada[0])
+        entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-                    coluna_inicio=(ord(cordenadas_inicio[0])-64)
+        cordenadas_inicio=converter(entrada[0])
 
-                    linha_inicio=(int(cordenadas_inicio[1])*2+2)
+        coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-                    cordenadas_final=converter(entrada[1])
+        linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-                    coluna_final=(ord(cordenadas_final[0])-64)
+        cordenadas_final=converter(entrada[1])
 
-                    linha_final=(int(cordenadas_final[1])*2+2)
+        coluna_final=(ord(cordenadas_final[0])-64)
 
-                    break
-                except (ValueError,IndexError):
-                    print("Insira uma entrada válida!")
+        linha_final=(int(cordenadas_final[1])*2+2)
 
         valido=False
         captura=False
@@ -507,52 +506,34 @@ def jogada_player1(matriz):
         matriz[linha_captura][coluna_captura]=" "
         quantidade_de_peças2 = quantidade_de_peças2 - 1
         #SE UMA PEÇA FOI CAPTURADA, A FUNÇÃO É EXECUTADA NOVAMENTE
-        clear()
         print_tabuleiro(matriz)
-        print("Você comeu uma peça! Jogue novamente.") if modoOffline==False else None
+        print("Você comeu uma peça! Jogue novamente.")
         jogada_player1(matriz)
 
     return matriz
 
 def jogada_player2(matriz):
-    '''Função que faz a jogada do player das peças "@"'''
     global quantidade_de_peças1 
-    print("Você já comeu: ",15 - quantidade_de_peças1, "peças do jogador adversário.") if modoOffline==False else None
-    
-    if modoOffline:
-        entrada=jogadasLista[0].split("--")
+    print("Você já comeu: ",15 - quantidade_de_peças1, "peças do jogador adversário.")
+    '''Função que faz a jogada do player das peças "@"'''
+    global modoOffline
+    while True:
+        try:
+            entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+            cordenadas_inicio=converter(entrada[0])
 
-        cordenadas_inicio=converter(entrada[0])
+            coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-        coluna_inicio=(ord(cordenadas_inicio[0])-64)
+            linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-        linha_inicio=(int(cordenadas_inicio[1])*2+2)
+            cordenadas_final=converter(entrada[1])
 
-        cordenadas_final=converter(entrada[1])
+            coluna_final=(ord(cordenadas_final[0])-64)
 
-        coluna_final=(ord(cordenadas_final[0])-64)
-
-        linha_final=(int(cordenadas_final[1])*2+2)
-    else:
-        while True:
-            try:
-                entrada=input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
-
-                cordenadas_inicio=converter(entrada[0])
-
-                coluna_inicio=(ord(cordenadas_inicio[0])-64)
-
-                linha_inicio=(int(cordenadas_inicio[1])*2+2)
-
-                cordenadas_final=converter(entrada[1])
-
-                coluna_final=(ord(cordenadas_final[0])-64)
-
-                linha_final=(int(cordenadas_final[1])*2+2)
-
-                break
-            except (ValueError,IndexError):
-                    print("Insira uma entrada válida!")
+            linha_final=(int(cordenadas_final[1])*2+2)
+            break
+        except (ValueError,IndexError):
+            print("Insira uma entrada válida!")
     valido=False
     captura=False
 
@@ -596,28 +577,24 @@ def jogada_player2(matriz):
     if (x==True or y==True) and captura==False:
         valido=False
 
-    while valido==False and modoOffline==False:
+    while valido==False:
 
         #SE O MOVIMENTO FOR INVÁLIDO, O CÓDIGO SE REPETE
         print("Jogada inválida, por favor, tente novamente")
-        while True:
-            try:
-                entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-                cordenadas_inicio=converter(entrada[0])
+        entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-                coluna_inicio=(ord(cordenadas_inicio[0])-64)
+        cordenadas_inicio=converter(entrada[0])
 
-                linha_inicio=(int(cordenadas_inicio[1])*2+2)
+        coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-                cordenadas_final=converter(entrada[1])
+        linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-                coluna_final=(ord(cordenadas_final[0])-64)
+        cordenadas_final=converter(entrada[1])
 
-                linha_final=(int(cordenadas_final[1])*2+2)
-                break
-            except (ValueError,IndexError):
-                print("Insira uma entrada válida!")
+        coluna_final=(ord(cordenadas_final[0])-64)
+
+        linha_final=(int(cordenadas_final[1])*2+2)
 
         valido=False
         captura=False
@@ -687,12 +664,219 @@ def jogada_player2(matriz):
         
         matriz[linha_captura][coluna_captura]=" "
         quantidade_de_peças1= quantidade_de_peças1 - 1
-        clear()
         print_tabuleiro(matriz)
-        print("Você comeu uma peça! Jogue novamente.") if modoOffline==False else None
+        print("Você comeu uma peça! Jogue novamente.")
         jogada_player2(matriz)
     
     return matriz
+
+def jogadaoffline_player1(matriz,jogadas):
+    '''Função que faz a jogada do player das peças "o"'''
+    global quantidade_de_peças2
+    
+    #PEGANDO O INPUT E O DIVIDINDO EM DUAS PARTES, AS CORDENADAS DE INICIO E AS CORDENADAS FINAIS
+    global jogaCima
+    
+    entrada=jogadas.split("--")
+
+    cordenadas_inicio=converter(entrada[0])
+
+    coluna_inicio=(ord(cordenadas_inicio[0])-64)
+
+    linha_inicio=(int(cordenadas_inicio[1])*2+2)
+
+    cordenadas_final=converter(entrada[1])
+
+    coluna_final=(ord(cordenadas_final[0])-64)
+
+    linha_final=(int(cordenadas_final[1])*2+2)
+
+    #ESSA VARIÁVEL FICA ATIVA SE UM MOVIMENTO É VÁLIDO
+    valido=False
+
+    #ESSA VARIÁVEL FICA ATIVA SE FOR UM MOVIMENTO DE CAPTURA
+    captura=False
+
+    #AS DUAS PRÓXIMAS VARIÁVEIS RECEBEM FUNÇÕES JÁ EXPLICADAS
+    x=dama_pode_comer1(matriz)
+    y=pode_ser_comida1(matriz)
+    z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
+    #VERIFICANDO SE O MOVIMENTO É VÁLIDO
+    #SEGUEM UMA SEQUENCIA DE IF E ELIFS QUE VÃO CHECANDO AS CONDIÇÕES PARA TODOS OS TIPOS DE MOVIMENTO, SE TODAS ELAS FOREM ACEITAS, A VARIÁVEL "VALIDO", SERA VERDADEIRA
+
+    #O PRIMEIRO IF VERIFICA SE É UM MOVIMENTO NORMAL DE UMA PEÇA NORMAL, OLHANDO AS CONDIÇÕES PARA QUE ELE ACONTEÇA
+    if matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
+        valido=True
+
+    #OS DOIS ELIFS VERIFICAM SE É UM MOVIMENTO NORMAL DE UMA DAMA, OLHANDO AS CONDIÇÕES PARA QUE ELE ACONTEÇA 
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
+        valido=True
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
+        valido=True
+
+    #O IF E O ELIF VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA PEÇA NORMAL
+    if matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and (matriz[linha_final-2][coluna_final-1]=="@" or matriz[linha_final-2][coluna_final-1]=="&") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and (matriz[linha_final+2][coluna_final+1]=="@" or matriz[linha_final+2][coluna_final+1]=="&")) and matriz[linha_final][coluna_final]==" ":
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and (matriz[linha_final-2][coluna_final+1]=="@" or matriz[linha_final-2][coluna_final+1]=="&") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and (matriz[linha_final+2][coluna_final-1]=="@" or matriz[linha_final+2][coluna_final-1]=="&")) and matriz[linha_final][coluna_final]==" ":
+        valido=True
+        captura=True
+
+    #OS PROXIMOS QUATRO ELIFS VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="@" or matriz[linha_final+2][coluna_final+1]=="&") and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="@" or matriz[linha_final-2][coluna_final-1]=="&") and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final-2][coluna_final+1]=="@" or matriz[linha_final-2][coluna_final+1]=="&") and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True:
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final+2][coluna_final-1]=="@" or matriz[linha_final+2][coluna_final-1]=="&") and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True:                                                                                        
+        valido=True
+        captura=True
+
+
+    #VERIFICANDO SE NÃO HÁ NENHUMA PEÇA QUE POSSA SER COMIDA, SE HOUVER, O JOGADOR É OBRIGADO A EXECUTAR O MOVIMENTO DE COMÊ-LA
+    if (y==True or x==True) and captura==False:
+        valido=False
+
+    if valido==False:
+        jogaCima=False
+    if valido:
+        #PARA EXECUTAR O MOVIMENTO, TROCA-SE DE LUGAR O ELEMENTOS DAS CORDENADAS INICIAIS COM O ELEMENTO DAS CORDENADAS FINAIS
+        aux=matriz[linha_inicio][coluna_inicio]
+        matriz[linha_inicio][coluna_inicio]=matriz[linha_final][coluna_final]
+        matriz[linha_final][coluna_final]=aux
+        global quantidade_de_movimentos 
+        quantidade_de_movimentos= quantidade_de_movimentos + 1
+        if captura==True:
+            #SE O MOVIMENTO FOR DE CAPTURA, ALÉM DE MOVER A PEÇA, APAGA-SE A PEÇA QUE FOI COMIDA.
+            #EM CADA SITUAÇÃO, AS CORDENADAS DE CAPTURA GUARDAM A LOCALIZAÇÃO DA PEÇA CAPTURADA
+            if coluna_final>coluna_inicio and linha_final>linha_inicio:
+                coluna_captura=coluna_final-1
+                linha_captura=linha_final-2
+
+            elif coluna_final<coluna_inicio and linha_final<linha_inicio:
+                coluna_captura=coluna_final+1
+                linha_captura=linha_final+2
+
+            elif coluna_final>coluna_inicio and linha_final<linha_inicio:
+                coluna_captura=coluna_final-1
+                linha_captura=linha_final+2
+
+            elif coluna_final<coluna_inicio and linha_final>linha_inicio:
+                coluna_captura=coluna_final+1
+                linha_captura=linha_final-2
+
+            #POR FIM, APAGA-SE O ELEMENTO QUE ESTAVA NAS CORDENADAS DE CAPTURA
+            matriz[linha_captura][coluna_captura]=" "
+            quantidade_de_peças2 = quantidade_de_peças2 - 1
+            #SE UMA PEÇA FOI CAPTURADA, A FUNÇÃO É EXECUTADA NOVAMENTE
+            jogaCima=True
+        if captura==False:
+            jogaCima=False
+
+    return matriz, valido
+
+def jogadaoffline_player2(matriz,jogadas):
+    '''Função que faz a jogada do player das peças "@"'''
+    global quantidade_de_peças1 
+    
+    global jogaCima
+
+    entrada=jogadas.split("--")
+
+    cordenadas_inicio=converter(entrada[0])
+
+    coluna_inicio=(ord(cordenadas_inicio[0])-64)
+
+    linha_inicio=(int(cordenadas_inicio[1])*2+2)
+
+    cordenadas_final=converter(entrada[1])
+
+    coluna_final=(ord(cordenadas_final[0])-64)
+
+    linha_final=(int(cordenadas_final[1])*2+2)
+
+    valido=False
+    captura=False
+
+    x=dama_pode_comer2(matriz)
+    y=pode_ser_comida2(matriz)
+    z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
+
+    #MOVIMENTO NORMAL DE PEÇA NORMAL
+    if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1)))  and matriz[linha_final][coluna_final]==" ":
+        valido=True
+
+    #MOVIMENTO NORMAL DE DAMA
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
+        valido=True
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
+        valido=True
+
+    #MOVIMENTO DE CAPTURA FEITO POR UMA PEÇA NORMAL
+    if matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O")) and matriz[linha_final][coluna_final]==" ":
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and (matriz[linha_final-2][coluna_final+1]=="o" or matriz[linha_final-2][coluna_final+1]=="O") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and (matriz[linha_final+2][coluna_final-1]=="o" or matriz[linha_final+2][coluna_final-1]=="O")) and matriz[linha_final][coluna_final]==" ":
+        valido=True
+        captura=True
+
+    #MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O") and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final-2][coluna_final+1]=="o" or matriz[linha_final-2][coluna_final+1]=="O") and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True:
+        valido=True
+        captura=True
+    elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final+2][coluna_final-1]=="o" or matriz[linha_final+2][coluna_final-1]=="O") and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True:                                                                                        
+        valido=True
+        captura=True
+
+    #SE HOUVER UMA PEÇA QUE POSSA SER CAPTURADA, O JOGADOR É OBRIGADO A FAZER ISSO
+    if (x==True or y==True) and captura==False:
+        valido=False
+
+    if valido==False:
+        jogaCima=True
+    
+    if valido:
+        aux=matriz[linha_inicio][coluna_inicio]
+        matriz[linha_inicio][coluna_inicio]=matriz[linha_final][coluna_final]
+        matriz[linha_final][coluna_final]=aux
+        global quantidade_de_movimentos 
+        quantidade_de_movimentos= quantidade_de_movimentos + 1
+        if captura==True:
+
+            if coluna_final>coluna_inicio and linha_final>linha_inicio:
+                coluna_captura=coluna_final-1
+                linha_captura=linha_final-2
+
+            elif coluna_final<coluna_inicio and linha_final<linha_inicio:
+                coluna_captura=coluna_final+1
+                linha_captura=linha_final+2
+
+            elif coluna_final>coluna_inicio and linha_final<linha_inicio:
+                coluna_captura=coluna_final-1
+                linha_captura=linha_final+2
+
+            elif coluna_final<coluna_inicio and linha_final>linha_inicio:
+                coluna_captura=coluna_final+1
+                linha_captura=linha_final-2
+            
+            matriz[linha_captura][coluna_captura]=" "
+            quantidade_de_peças1= quantidade_de_peças1 - 1
+            jogaCima=False
+        if captura==False:
+            jogaCima=True
+        
+    return matriz, valido
+
 
 if len(sys.argv)>1: #SE A LINHA DE COMANDO DO TERMINAL FOR MAIOR DO QUE 1 COMANDO (CHAMAR O PROGRAMA E HAVER UM ARQUIVO POR EXEMPLO) ELE ENTRA NESSA CONDICIONAL, QUE PROPICIA O MODO OFFLINE
     modoOffline=True
@@ -700,11 +884,63 @@ if len(sys.argv)>1: #SE A LINHA DE COMANDO DO TERMINAL FOR MAIOR DO QUE 1 COMAND
         jogadas=entrada.read() #LEMOS AS JOGADAS ...
     jogadasLista=jogadas.splitlines() #...TORNAMOS O CONJUNTO DAS JOGADAS UMA LISTA ...
     jogadasLista=[jogada.strip() for jogada in jogadasLista] #...E RETIRAMOS A QUEBRA DE LINHA DE CADA ELEMENTO DA LISTA.
-    print(jogadasLista)
-    turno=0
+    turno=1
     jogo=True
     matriz=(tabuleiro_inicio())
-    if jogadasLista[0]=="C":
+    jogador = jogadasLista[0]
+
+    if jogador == "C":
+        jogaCima=True
+        while jogo:
+            if quantidade_de_peças1==0 or quantidade_de_peças2==0 or jogadasLista[turno]=="<Enter>":
+                jogo=False
+                print_tabuleiro(matriz)
+                print("Jogador de cima (o) comeu",15 - quantidade_de_peças2, "peças do jogador adversário.")
+                print("Jogador de baixo (@) comeu",15 - quantidade_de_peças1, "peças do jogador adversário.")
+                if quantidade_de_peças1==0:
+                    print("Jogador de cima ganhou!")
+                elif quantidade_de_peças2==0:
+                    print("Jogador de baixo ganhou!")
+                break
+            elif jogaCima:
+                matriz,valido=jogadaoffline_player1(matriz,jogadasLista[turno])
+                if valido==False:
+                    print("Há um erro na " + str(turno + 1) + "ª linha do arquivo durante a jogada do player 1.")
+                matriz=eh_dama(matriz)
+            elif jogaCima==False:
+                matriz,valido=jogadaoffline_player2(matriz,jogadasLista[turno])
+                if valido==False:
+                    print("Há um erro na " + str(turno + 1) + "ª linha do arquivo durante a jogada do player 2.")
+                matriz=eh_dama(matriz)
+            turno+=1
+            
+    if jogador == "B":
+        jogaCima=False
+        while jogo:
+            if quantidade_de_peças1==0 or quantidade_de_peças2==0 or jogadasLista[turno]=="<Enter>":
+                jogo=False
+                print_tabuleiro(matriz)
+                print("Jogador de cima (o) comeu",15 - quantidade_de_peças2, "peças do jogador adversário.")
+                print("Jogador de baixo (@) comeu",15 - quantidade_de_peças1, "peças do jogador adversário.")
+                if quantidade_de_peças1==0:
+                    print("Jogador de cima ganhou!")
+                elif quantidade_de_peças2==0:
+                    print("Jogador de baixo ganhou!")
+                break
+            elif jogaCima:
+                matriz,valido=jogadaoffline_player1(matriz,jogadasLista[turno])
+                if valido==False:
+                    print("Há um erro na " + str(turno + 1) + "ª linha do arquivo durante a jogada do player 1.")
+                matriz=eh_dama(matriz)
+            elif jogaCima==False:
+                matriz,valido=jogadaoffline_player2(matriz,jogadasLista[turno])
+                if valido==False:
+                    print("Há um erro na " + str(turno + 1) + "ª linha do arquivo durante a jogada do player 2.")
+                matriz=eh_dama(matriz)
+            turno+=1
+
+
+    '''if jogadasLista[0]=="C":
         del jogadasLista[0]
         while jogo:
             if turno%2==0:
@@ -732,7 +968,7 @@ if len(sys.argv)>1: #SE A LINHA DE COMANDO DO TERMINAL FOR MAIOR DO QUE 1 COMAND
             if quantidade_de_peças1==0 or quantidade_de_peças2==0 or len(jogadasLista)==0:
                 jogo=False
                 print_tabuleiro(matriz)
-    print(jogadasLista)
+    print(jogadasLista)'''
 
 else:
     modoOffline=False
@@ -769,6 +1005,8 @@ else:
 
                 #CHECANDO SE NÃO HÁ POSSÍVEIS DAMAS
                 matriz=eh_dama(matriz)
+
+                clear()
                 
                 print_tabuleiro(matriz)
             if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE BAIXO, O JOGADOR 2
@@ -776,6 +1014,8 @@ else:
 
                 #CHECANDO SE NÃO HÁ POSSÍVEIS DAMAS
                 matriz=eh_dama(matriz)
+
+                clear()
 
                 print_tabuleiro(matriz)
             if quantidade_de_peças2 == 0:
@@ -791,11 +1031,15 @@ else:
 
                 matriz=eh_dama(matriz)
 
+                clear()
+
                 print_tabuleiro(matriz)
             if turno%2==1: #E AS JOGADAS ÍMPARES SERÃO DO JOGADOR DE CIMA, O JOGADOR 1
                 matriz=jogada_player1(matriz)
 
                 matriz=eh_dama(matriz)
+
+                clear()
 
                 print_tabuleiro(matriz)
             if quantidade_de_peças1 == 0:
