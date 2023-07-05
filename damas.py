@@ -503,9 +503,14 @@ def jogada_player1(matriz):
             linha_captura=linha_final-2
 
         #POR FIM, APAGA-SE O ELEMENTO QUE ESTAVA NAS CORDENADAS DE CAPTURA
+        
         matriz[linha_captura][coluna_captura]=" "
         quantidade_de_peças2 = quantidade_de_peças2 - 1
-        #SE UMA PEÇA FOI CAPTURADA, A FUNÇÃO É EXECUTADA NOVAMENTE
+        
+        #VERIFICANDO SE UMA DAMA FOI FEITA NA CAPTURA
+        matriz=eh_dama(matriz)
+
+        #A FUNÇÃO É EXECUTADA NOVAMENTE
         print_tabuleiro(matriz)
         print("Você comeu uma peça! Jogue novamente.")
         jogada_player1(matriz)
@@ -664,6 +669,9 @@ def jogada_player2(matriz):
         
         matriz[linha_captura][coluna_captura]=" "
         quantidade_de_peças1= quantidade_de_peças1 - 1
+
+        matriz=eh_dama(matriz)
+        
         print_tabuleiro(matriz)
         print("Você comeu uma peça! Jogue novamente.")
         jogada_player2(matriz)
