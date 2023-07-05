@@ -96,16 +96,16 @@ def pode_ser_comida2(x):
 
             if matriz[i][j]=="o" or matriz[i][j]=="O":
 
-                if (matriz[i-2][j-1]=="@" and matriz[i+2][j+1]==" "):
+                if matriz[i-2][j-1]=="@" and matriz[i+2][j+1]==" " and j+1<11:
                     posso_comer=True
                             
-                if matriz[i+2][j+1]=="@" and matriz[i-2][j-1]==" ":
+                if matriz[i+2][j+1]=="@" and matriz[i-2][j-1]==" " and j-1>0:
                     posso_comer=True
                             
-                if matriz[i-2][j+1]=="@" and matriz[i+2][j-1]==" ":
+                if matriz[i-2][j+1]=="@" and matriz[i+2][j-1]==" " and j-1>0:
                     posso_comer=True
                             
-                if matriz[i+2][j-1]=="@" and matriz[i-2][j+1]==" ":
+                if matriz[i+2][j-1]=="@" and matriz[i-2][j+1]==" " and j+1<11:
                     posso_comer=True
     return posso_comer
 
@@ -118,16 +118,16 @@ def pode_ser_comida1(x):
             #O MESMO CÓDIGO É REPETIDO, PORÉM AGORA VERIFICANDO SE EXITE ALGUMA PEÇA "@" OU "&" QUE PODE SER COMIDA
             if matriz[i][j]=="@" or matriz[i][j]=="&":
 
-                if (matriz[i-2][j-1]=="o" and matriz[i+2][j+1]==" "):
+                if matriz[i-2][j-1]=="o" and matriz[i+2][j+1]==" " and j+1<11:
                     posso_comer=True
                 
-                if matriz[i+2][j+1]=="o" and matriz[i-2][j-1]==" ":
+                if matriz[i+2][j+1]=="o" and matriz[i-2][j-1]==" " and j-1>0:
                     posso_comer=True
                 
-                if matriz[i-2][j+1]=="o" and matriz[i+2][j-1]==" ":
+                if matriz[i-2][j+1]=="o" and matriz[i+2][j-1]==" " and j-1>0:
                     posso_comer=True
                 
-                if matriz[i+2][j-1]=="o" and matriz[i-2][j+1]==" ":
+                if matriz[i+2][j-1]=="o" and matriz[i-2][j+1]==" " and j+1<11:
                     posso_comer=True
 
     return posso_comer
