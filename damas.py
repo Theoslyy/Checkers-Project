@@ -190,54 +190,53 @@ def tem_comida_no_caminho1(matriz,a,b):
     c-=2
     d-=1
     
-    while c>=2 and d>=1:
-
-        if (matriz[c,d]=="@" or matriz[c,d]=="&") and matriz[c-2,d-1]==" ":
-            c=a
-            d=b
+    while tem_comida==False and c>=2 and d>=1:
+        if (matriz[c][d]=="@" or matriz[c][d]=="&") and matriz[c-2][d-1]==" " and d-1>0:
             tem_comida=True
             break
         c-=2
         d-=1
 
-
     if tem_comida==False:
+
+        c=a
+        d=b
+
         c+=2
         d+=1
-
-        while c<=21 and d<=10:
-
-            if (matriz[c,d]=="@" or matriz[c,d]=="&") and matriz[c+2,d+1]==" ":
-                c=a
-                d=b
+    
+        while tem_comida==False and c<=21 and d<=10:
+            if (matriz[c][d]=="@" or matriz[c][d]=="&") and matriz[c+2][d+1]==" " and d+1<11:
                 tem_comida=True
                 break
             c+=2
             d+=1
 
     if tem_comida==False:
+
+        c=a
+        d=b
+
         c-=2
         d+=1
     
-        while c>=2 and d<=10:
-
-            if (matriz[c,d]=="@" or matriz[c,d]=="&") and matriz[c-2,d+1]==" ":
-                c=a
-                d=b
+        while tem_comida==False and c>=2 and d<=10:
+            if (matriz[c][d]=="@" or matriz[c][d]=="&") and matriz[c-2][d+1]==" " and d+1<11:
                 tem_comida=True
                 break
             c-=2
             d+=1
     
     if tem_comida==False:
+
+        c=a
+        d=b
+
         c+=2
         d-=1
     
-        while c<=21 and d>=1:
-
-            if (matriz[c,d]=="@" or matriz[c,d]=="&") and matriz[c+2,d-1]==" ":
-                c=a
-                d=b
+        while tem_comida==False and c<=21 and d>=1:
+            if (matriz[c][d]=="@" or matriz[c][d]=="&") and matriz[c+2][d-1]==" " and d-1>0:
                 tem_comida=True
                 break
             c+=2
@@ -255,46 +254,54 @@ def tem_comida_no_caminho2(matriz,a,b):
     d-=1
     
     while tem_comida==False and c>=2 and d>=1:
-        if (matriz[c,d]=="o" or matriz[c,d]=="O") and matriz[c-2,d-1]==" ":
-            c=a
-            d=b
+        if (matriz[c][d]=="o" or matriz[c][d]=="O") and matriz[c-2][d-1]==" " and d-1>0:
             tem_comida=True
+            break
         c-=2
         d-=1
 
     if tem_comida==False:
+
+        c=a
+        d=b
+
         c+=2
         d+=1
     
         while tem_comida==False and c<=21 and d<=10:
-            if (matriz[c,d]=="o" or matriz[c,d]=="O") and matriz[c+2,d+1]==" ":
-                c=a
-                d=b
+            if (matriz[c][d]=="o" or matriz[c][d]=="O") and matriz[c+2][d+1]==" " and d+1<11:
                 tem_comida=True
+                break
             c+=2
             d+=1
 
     if tem_comida==False:
+
+        c=a
+        d=b
+
         c-=2
         d+=1
     
         while tem_comida==False and c>=2 and d<=10:
-            if (matriz[c,d]=="o" or matriz[c,d]=="O") and matriz[c-2,d+1]==" ":
-                c=a
-                d=b
+            if (matriz[c][d]=="o" or matriz[c][d]=="O") and matriz[c-2][d+1]==" " and d+1<11:
                 tem_comida=True
+                break
             c-=2
             d+=1
     
     if tem_comida==False:
+
+        c=a
+        d=b
+
         c+=2
         d-=1
     
         while tem_comida==False and c<=21 and d>=1:
-            if (matriz[c,d]=="o" or matriz[c,d]=="O") and matriz[c+2,d-1]==" ":
-                c=a
-                d=b
+            if (matriz[c][d]=="o" or matriz[c][d]=="O") and matriz[c+2][d-1]==" " and d-1>0:
                 tem_comida=True
+                break
             c+=2
             d-=1
 
@@ -303,26 +310,30 @@ def tem_comida_no_caminho2(matriz,a,b):
 def dama_pode_comer1(matriz):
     '''Função para verificar possibilidade de comer das damas'''
     pode_comer=False
-
-    for i in range(23):
-        for j in range(12):
+    controle=False
+    for i in range(1,21):
+        for j in range(1,11):
             if matriz[i][j]=="O" and tem_comida_no_caminho1(matriz,i,j)==True:
                 pode_comer=True
+                controle=True
                 break
-        break
+        if controle==True:
+            break
     
     return pode_comer
 
 def dama_pode_comer2(matriz):
     '''Função para verificar possibilidade de comer das damas'''
     pode_comer=False
-
-    for i in range(23):
-        for j in range(12):
-            if matriz[i][j]=="&" and tem_comida_no_caminho2(matriz,i,j)==True:
+    controle=False
+    for i in range(1,21):
+        for j in range(1,11):
+            if matriz[i][j]=="&" and tem_comida_no_caminho1(matriz,i,j)==True:
                 pode_comer=True
+                controle=True
                 break
-        break
+        if controle==True:
+            break
     
     return pode_comer
 
