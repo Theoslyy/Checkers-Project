@@ -1157,9 +1157,9 @@ if len(sys.argv)>1: #SE A LINHA DE COMANDO DO TERMINAL FOR MAIOR DO QUE 1 COMAND
                 print("Jogador de cima (o) comeu",15 - quantidade_de_peças2, "peças do jogador adversário.")
                 print("Jogador de baixo (@) comeu",15 - quantidade_de_peças1, "peças do jogador adversário.")
                 if quantidade_de_peças1==0:
-                    print("Jogador de cima ganhou!")
+                    print("Jogador de baixo venceu!")
                 elif quantidade_de_peças2==0:
-                    print("Jogador de baixo ganhou!")
+                    print("Jogador de cima venceu!")
                 break
             elif jogaCima:
                 matriz,valido=jogadaoffline_player1(matriz,jogadasLista[turno])
