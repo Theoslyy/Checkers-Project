@@ -917,7 +917,7 @@ def jogadaoffline_player1(matriz,jogadas):
         #AS DUAS PRÓXIMAS VARIÁVEIS RECEBEM FUNÇÕES JÁ EXPLICADAS
         captura_dama=False
         x=dama_pode_comer1(matriz)
-        y=pode_ser_comida1(matriz)
+        y=pode_ser_comida2(matriz)
         z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
         #VERIFICANDO SE O MOVIMENTO É VÁLIDO
         #SEGUEM UMA SEQUENCIA DE IF E ELIFS QUE VÃO CHECANDO AS CONDIÇÕES PARA TODOS OS TIPOS DE MOVIMENTO, SE TODAS ELAS FOREM ACEITAS, A VARIÁVEL "VALIDO", SERA VERDADEIRA
@@ -1286,3 +1286,4 @@ else:
             novamente_bool = True
         elif novamente == 0:
             novamente_bool = False
+        
