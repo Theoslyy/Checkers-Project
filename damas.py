@@ -1105,7 +1105,6 @@ def jogadaoffline_player2(matriz,jogadas):
 
                 quantidade_de_peças1= quantidade_de_peças1 - 1
                 jogaCima=False
-                print(jogaCima)
 
             if captura==False and captura_dama==False:
                 jogaCima=True
@@ -1277,9 +1276,9 @@ else:
                     jogo = False
                 turno+=1
         if quantidade_de_peças1 == 0:
-            print("O jogador 2 venceu!")
+            print("O jogador de baixo venceu!")
         if quantidade_de_peças2 == 0:
-            print("O jogador 1 venceu!")
+            print("O jogador de cima venceu!")
         novamente = int(input("Quer jogar outra partida? Digite 1 para sim e 0 para não. "))
         while (novamente != 1 and novamente != 0):
             novamente = int(input("Entrada incorreta, quer jogar outra partida? Digite 1 para sim ou 0 para nao. "))
