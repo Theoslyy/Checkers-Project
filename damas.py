@@ -1,3 +1,11 @@
+'''
+TRABALHO DE FuP
+
+PARTICIPANTES:
+PEDRO MILITÃO BONA LOPES-552261
+PEDRO WAGNER RABELO EVARISTO-552271
+THEO ARAUJO MAGALHÃES-555910
+'''
 import sys
 import os
 import numpy as np
@@ -89,7 +97,7 @@ def eh_dama(x):
     return x
 
 
-def pode_ser_comida2(x):
+def pode_ser_comida1(x):
     '''É verificado se a peça do tipo "o" pode ser capturada, verifica-se se existe uma peça oposta de um lado e um espaço vazio no outro'''
     matriz=x
     posso_comer=False
@@ -111,7 +119,7 @@ def pode_ser_comida2(x):
                     posso_comer=True
     return posso_comer
 
-def pode_ser_comida1(x):
+def pode_ser_comida2(x):
     '''É verificado se a peça do tipo "@" pode ser capturada, verifica-se se existe uma peça oposta de um lado e um espaço vazio no outro'''
     matriz=x
     posso_comer=False
@@ -182,6 +190,161 @@ def dama_ta_livre(m,a,b,c,d):
 
     return ta_livre
 
+def esvaziar_caminho(m,a,b,c,d):
+    #Função que esvazia o caminho numa captura
+
+    if a>c and b>d:
+        a-=2
+        b-=1
+        while a>c and b>d:
+            m[a][b]=" "
+
+            a-=2
+            b-=1
+
+    elif a<c and b<d:
+        a+=2
+        b+=1
+        while a<c and b<d:
+            m[a][b]=" "
+
+            a+=2
+            b+=1
+
+    elif a>c and b<d:
+        a-=2
+        b+=1
+        while a>c and b<d:
+            m[a][b]=" "
+
+            a-=2
+            b+=1
+
+    elif a<c and b>d:
+        a+=2
+        b-=1
+        while a<c and b>d:
+            m[a][b]=" "
+
+            a+=2
+            b-=1
+
+    return m
+
+def ta_livre_pra_comer1(m,a,b,c,d):
+    #ARIAÇÃO DA FUNÇÃO "TÁ LIVRE" QUE VERIFICA SE, EM UM MOVIMENTO DE CAPTURA, EXISTEM MAIS COISAS ALÉM DA PEÇA QUE SERÁ CAPTURADA
+
+    ta_livre=True
+    contador=0
+
+    if a>c and b>d:
+        a-=2
+        b-=1
+        while a>c and b>d:
+            if m[a][b]=="@" or m[a][b]=="&":
+                contador+=1
+            if m[a][b]!=" " and m[a][b]!="@" and m[a][b]!="&":
+                ta_livre=False
+                break
+            a-=2
+            b-=1
+    
+    elif a<c and b<d:
+        a+=2
+        b+=1
+        while a<c and b<d:
+            if m[a][b]=="@" or m[a][b]=="&":
+                contador+=1
+            if m[a][b]!=" " and m[a][b]!="@" and m[a][b]!="&":
+                ta_livre=False
+                break
+            a+=2
+            b+=1
+    
+    elif a>c and b<d:
+        a-=2
+        b+=1
+        while a>c and b<d:
+            if m[a][b]=="@" or m[a][b]=="&":
+                contador+=1
+            if m[a][b]!=" " and m[a][b]!="@" and m[a][b]!="&":
+                ta_livre=False
+                break
+            a-=2
+            b+=1
+
+    elif a<c and b>d:
+        a+=2
+        b-=1
+        while a<c and b>d:
+            if m[a][b]=="@" or m[a][b]=="&":
+                contador+=1
+            if m[a][b]!=" " and m[a][b]!="@" and m[a][b]!="&":
+                ta_livre=False
+                break
+            a+=2
+            b-=1
+    if contador!=1:
+        ta_livre=False
+    
+    return ta_livre
+
+def ta_livre_pra_comer2(m,a,b,c,d):
+    ta_livre=True
+    contador=0
+
+    if a>c and b>d:
+        a-=2
+        b-=1
+        while a>c and b>d:
+            if m[a][b]=="o" or m[a][b]=="O":
+                contador+=1
+            if m[a][b]!=" " and m[a][b]!="o" and m[a][b]!="O":
+                ta_livre=False
+                break
+            a-=2
+            b-=1
+
+    elif a<c and b<d:
+        a+=2
+        b+=1
+        while a<c and b<d:
+            if m[a][b]=="o" or m[a][b]=="O":
+                contador+=1
+            if m[a][b]!=" " and m[a][b]!="o" and m[a][b]!="O":
+                ta_livre=False
+                break
+            a+=2
+            b+=1
+
+    elif a>c and b<d:
+        a-=2
+        b+=1
+        while a>c and b<d:
+            if m[a][b]=="o" or m[a][b]=="O":
+                contador+=1
+            if m[a][b]!=" " and m[a][b]!="o" and m[a][b]!="O":
+                ta_livre=False
+                break
+            a-=2
+            b+=1
+
+    elif a<c and b>d:
+        a+=2
+        b-=1
+        while a<c and b>d:
+            if m[a][b]=="o" or m[a][b]=="O":
+                contador+=1
+            if m[a][b]!=" " and m[a][b]!="o" and m[a][b]!="O":
+                ta_livre=False
+                break
+            a+=2
+            b-=1
+
+    if contador!=1:
+        ta_livre=False
+
+    return ta_livre
 def tem_comida_no_caminho1(matriz,a,b):
     '''Função para verificar obrigatoriedade de comer das damas'''
     tem_comida=False
@@ -330,7 +493,7 @@ def dama_pode_comer2(matriz):
     controle=False
     for i in range(1,21):
         for j in range(1,11):
-            if matriz[i][j]=="&" and tem_comida_no_caminho1(matriz,i,j)==True:
+            if matriz[i][j]=="&" and tem_comida_no_caminho2(matriz,i,j)==True:
                 pode_comer=True
                 controle=True
                 break
@@ -345,46 +508,30 @@ def jogada_player1(matriz):
     if quantidade_de_peças1 != 0 and quantidade_de_peças2 != 0:
         print("Você já comeu: ",15 - quantidade_de_peças2, "peças do jogador adversário.")
         #PEGANDO O INPUT E O DIVIDINDO EM DUAS PARTES, AS CORDENADAS DE INICIO E AS CORDENADAS FINAIS
-        global modoOffline
-        if modoOffline: #SE A VARIÁVEL modoOffline FOR VERDADEIRA, ENTÃO OS COMANDOS DE JOGADA SERÃO OS DO ARQUIVO
-            entrada=jogadasLista[0].split("--")
+        while True:
+            try:
+                entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-            cordenadas_inicio=converter(entrada[0])
+                #AS CORDENADAS INICIAIS SÃO A PRIMEIRA PARTE DO INPUT, ELAS SÃO DIVIDIAS NOVAMENTE, OBTENDO DOIS ELEMENTOS
+                cordenadas_inicio=converter(entrada[0])
 
-            coluna_inicio=(ord(cordenadas_inicio[0])-64)
+                #O PRIMEIRO ELEMENTO É A COLUNA, QUE PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
+                #PEGAMOS O CÓDIGO ASCII DA LETRA E SUBTRAÍMOS 64, OBTENDO O NÚMERO CORRESPONDENTE AO ÍNDICE
+                coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-            linha_inicio=(int(cordenadas_inicio[1])*2+2)
+                #O SEGUNDO ELEMENTO É A LINHA, QUE TAMBÉM PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
+                #MULTIPLICAMOS O ÍNDICE POR 2 E SOMAMOS O RESULTADO COM 2, OBTENDO UM NÚMERO CORRESPONDENTE AO ÍNDICE
+                linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-            cordenadas_final=converter(entrada[1])
+                #O MESMO PROCESSO É FEITO PARA AS CORDENADAS FINAIS, QUE SÃO A SEGUNDA PARTE DO INPUT ORIGINAL
+                cordenadas_final=converter(entrada[1])
 
-            coluna_final=(ord(cordenadas_final[0])-64)
+                coluna_final=(ord(cordenadas_final[0])-64)
 
-            linha_final=(int(cordenadas_final[1])*2+2)
-        else:
-            while True:
-                try:
-                    entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
-
-                    #AS CORDENADAS INICIAIS SÃO A PRIMEIRA PARTE DO INPUT, ELAS SÃO DIVIDIAS NOVAMENTE, OBTENDO DOIS ELEMENTOS
-                    cordenadas_inicio=converter(entrada[0])
-
-                    #O PRIMEIRO ELEMENTO É A COLUNA, QUE PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
-                    #PEGAMOS O CÓDIGO ASCII DA LETRA E SUBTRAÍMOS 64, OBTENDO O NÚMERO CORRESPONDENTE AO ÍNDICE
-                    coluna_inicio=(ord(cordenadas_inicio[0])-64)
-
-                    #O SEGUNDO ELEMENTO É A LINHA, QUE TAMBÉM PASSA POR UM AJUSTE PARA QUE POSSAMOS TRABALHAR COM ELA
-                    #MULTIPLICAMOS O ÍNDICE POR 2 E SOMAMOS O RESULTADO COM 2, OBTENDO UM NÚMERO CORRESPONDENTE AO ÍNDICE
-                    linha_inicio=(int(cordenadas_inicio[1])*2+2)
-
-                    #O MESMO PROCESSO É FEITO PARA AS CORDENADAS FINAIS, QUE SÃO A SEGUNDA PARTE DO INPUT ORIGINAL
-                    cordenadas_final=converter(entrada[1])
-
-                    coluna_final=(ord(cordenadas_final[0])-64)
-
-                    linha_final=(int(cordenadas_final[1])*2+2)
-                    break
-                except (IndexError, ValueError):
-                    print("Insira uma entrada válida!")
+                linha_final=(int(cordenadas_final[1])*2+2)
+                break
+            except (IndexError, ValueError):
+                print("Insira uma entrada válida!")
         #ESSA VARIÁVEL FICA ATIVA SE UM MOVIMENTO É VÁLIDO
         valido=False
 
@@ -392,8 +539,9 @@ def jogada_player1(matriz):
         captura=False
 
         #AS DUAS PRÓXIMAS VARIÁVEIS RECEBEM FUNÇÕES JÁ EXPLICADAS
+        captura_dama=False
         x=dama_pode_comer1(matriz)
-        y=pode_ser_comida1(matriz)
+        y=pode_ser_comida2(matriz)
         z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
         #VERIFICANDO SE O MOVIMENTO É VÁLIDO
         #SEGUEM UMA SEQUENCIA DE IF E ELIFS QUE VÃO CHECANDO AS CONDIÇÕES PARA TODOS OS TIPOS DE MOVIMENTO, SE TODAS ELAS FOREM ACEITAS, A VARIÁVEL "VALIDO", SERA VERDADEIRA
@@ -417,80 +565,99 @@ def jogada_player1(matriz):
             captura=True
 
         #OS PROXIMOS QUATRO ELIFS VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
-        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="@" or matriz[linha_final+2][coluna_final+1]=="&") and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="@" or matriz[linha_final-2][coluna_final-1]=="&") and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final-2][coluna_final+1]=="@" or matriz[linha_final-2][coluna_final+1]=="&") and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True:
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final+2][coluna_final-1]=="@" or matriz[linha_final+2][coluna_final-1]=="&") and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True:                                                                                        
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:                                                                                        
             valido=True
-            captura=True
+            captura_dama=True
 
 
-        #VERIFICANDO SE NÃO HÁ NENHUMA PEÇA QUE POSSA SER COMIDA, SE HOUVER, O JOGADOR É OBRIGADO A EXECUTAR O MOVIMENTO DE COMÊ-LA
-        if (y==True or x==True) and captura==False:
+            #VERIFICANDO SE NÃO HÁ NENHUMA PEÇA QUE POSSA SER COMIDA, SE HOUVER, O JOGADOR É OBRIGADO A EXECUTAR O MOVIMENTO DE COMÊ-LA
+        if (y==True or x==True) and captura==False and captura_dama==False:
             valido=False
 
         while valido==False:
-            print("Jogada inválida, por favor, tente novamente")
-            #SE O MOVIMENTO NÃO FOR VÁLIDO, O CÓDIGO SE REPETE
+            while True:
+                try:
+                    print("Jogada inválida, por favor, tente novamente")
+                    #SE O MOVIMENTO NÃO FOR VÁLIDO, O CÓDIGO SE REPETE
 
 
-            entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+                    entrada= input("Turno do Jogador de Cima, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-            cordenadas_inicio=converter(entrada[0])
+                    cordenadas_inicio=converter(entrada[0])
 
-            coluna_inicio=(ord(cordenadas_inicio[0])-64)
+                    coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-            linha_inicio=(int(cordenadas_inicio[1])*2+2)
+                    linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-            cordenadas_final=converter(entrada[1])
+                    cordenadas_final=converter(entrada[1])
 
-            coluna_final=(ord(cordenadas_final[0])-64)
+                    coluna_final=(ord(cordenadas_final[0])-64)
 
-            linha_final=(int(cordenadas_final[1])*2+2)
+                    linha_final=(int(cordenadas_final[1])*2+2)
+                    break
+                except (ValueError,IndexError):
+                    print("insira uma entrada válida!")
 
+            #ESSA VARIÁVEL FICA ATIVA SE UM MOVIMENTO É VÁLIDO
             valido=False
+
+            #ESSA VARIÁVEL FICA ATIVA SE FOR UM MOVIMENTO DE CAPTURA
             captura=False
 
+            #AS DUAS PRÓXIMAS VARIÁVEIS RECEBEM FUNÇÕES JÁ EXPLICADAS
+            captura_dama=False
             x=dama_pode_comer1(matriz)
-            y=pode_ser_comida1(matriz)
+            y=pode_ser_comida2(matriz)
             z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
+            #VERIFICANDO SE O MOVIMENTO É VÁLIDO
+            #SEGUEM UMA SEQUENCIA DE IF E ELIFS QUE VÃO CHECANDO AS CONDIÇÕES PARA TODOS OS TIPOS DE MOVIMENTO, SE TODAS ELAS FOREM ACEITAS, A VARIÁVEL "VALIDO", SERA VERDADEIRA
 
+            #O PRIMEIRO IF VERIFICA SE É UM MOVIMENTO NORMAL DE UMA PEÇA NORMAL, OLHANDO AS CONDIÇÕES PARA QUE ELE ACONTEÇA
             if matriz[linha_inicio][coluna_inicio]=="o" and (((linha_final==linha_inicio+2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
-                valido=True 
+                valido=True
 
+            #OS DOIS ELIFS VERIFICAM SE É UM MOVIMENTO NORMAL DE UMA DAMA, OLHANDO AS CONDIÇÕES PARA QUE ELE ACONTEÇA 
             elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
                 valido=True
             elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" "and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
                 valido=True
 
+            #O IF E O ELIF VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA PEÇA NORMAL
             if matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and (matriz[linha_final-2][coluna_final-1]=="@" or matriz[linha_final-2][coluna_final-1]=="&") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and (matriz[linha_final+2][coluna_final+1]=="@" or matriz[linha_final+2][coluna_final+1]=="&")) and matriz[linha_final][coluna_final]==" ":
                 valido=True
                 captura=True
             elif matriz[linha_inicio][coluna_inicio]=="o" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio-2 and (matriz[linha_final-2][coluna_final+1]=="@" or matriz[linha_final-2][coluna_final+1]=="&") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio+2 and (matriz[linha_final+2][coluna_final-1]=="@" or matriz[linha_final+2][coluna_final-1]=="&")) and matriz[linha_final][coluna_final]==" ":
                 valido=True
                 captura=True
-            
-            elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="@" or matriz[linha_final+2][coluna_final+1]=="&") and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+
+            #OS PROXIMOS QUATRO ELIFS VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
+            elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
                 valido=True
-                captura=True
-            elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="@" or matriz[linha_final-2][coluna_final-1]=="&") and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+                captura_dama=True
+            elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
                 valido=True
-                captura=True
-            elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final-2][coluna_final+1]=="@" or matriz[linha_final-2][coluna_final+1]=="&") and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True:
+                captura_dama=True
+            elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
                 valido=True
-                captura=True
-            elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final+2][coluna_final-1]=="@" or matriz[linha_final+2][coluna_final-1]=="&") and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True:                                                                                        
+                captura_dama=True
+            elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:                                                                                        
                 valido=True
-                captura=True
-            
-            if (x==True or y==True) and captura==False:
+                captura_dama=True
+
+
+            #VERIFICANDO SE NÃO HÁ NENHUMA PEÇA QUE POSSA SER COMIDA, SE HOUVER, O JOGADOR É OBRIGADO A EXECUTAR O MOVIMENTO DE COMÊ-LA
+            if (y==True or x==True) and captura==False and captura_dama==False:
                 valido=False
+
         #PARA EXECUTAR O MOVIMENTO O MOVIMENTO, TROCA-SE DE LUGAR O ELEMENTOS DAS CORDENADAS INICIAIS COM O ELEMENTO DAS CORDENADAS FINAIS
         aux=matriz[linha_inicio][coluna_inicio]
         matriz[linha_inicio][coluna_inicio]=matriz[linha_final][coluna_final]
@@ -529,6 +696,15 @@ def jogada_player1(matriz):
             print("Você comeu uma peça! Jogue novamente.")
             jogada_player1(matriz)
 
+        elif captura_dama==True:
+            #SE UMA DAMA CAPTURAR, A DIAGONAL SE TORNA VAZIA
+            esvaziar_caminho(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
+            quantidade_de_peças2 = quantidade_de_peças2 - 1
+            matriz=eh_dama(matriz)
+            print_tabuleiro(matriz)
+            print("Você comeu uma peça! Jogue novamente.")
+            jogada_player1(matriz)
+
         return matriz
 
 def jogada_player2(matriz):
@@ -556,22 +732,23 @@ def jogada_player2(matriz):
                 print("Insira uma entrada válida!")
         valido=False
         captura=False
+        captura_dama=False
 
         x=dama_pode_comer2(matriz)
-        y=pode_ser_comida2(matriz)
+        y=pode_ser_comida1(matriz)
+        print(x,y)
         z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
-
         #MOVIMENTO NORMAL DE PEÇA NORMAL
-        if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1)))  and matriz[linha_final][coluna_final]==" ":
+        if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
             valido=True
 
-        #MOVIMENTO NORMAL DE DAMA
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
+        #OS DOIS ELIFS VERIFICAM SE É UM MOVIMENTO NORMAL DE UMA DAMA, OLHANDO AS CONDIÇÕES PARA QUE ELE ACONTEÇA 
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
             valido=True
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
             valido=True
 
-        #MOVIMENTO DE CAPTURA FEITO POR UMA PEÇA NORMAL
+        #O IF E O ELIF VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA PEÇA NORMAL
         if matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O")) and matriz[linha_final][coluna_final]==" ":
             valido=True
             captura=True
@@ -579,61 +756,70 @@ def jogada_player2(matriz):
             valido=True
             captura=True
 
-        #MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O") and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+        #OS PROXIMOS QUATRO ELIFS VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final-2][coluna_final+1]=="o" or matriz[linha_final-2][coluna_final+1]=="O") and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True:
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final+2][coluna_final-1]=="o" or matriz[linha_final+2][coluna_final-1]=="O") and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True:                                                                                        
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:                                                                                        
             valido=True
-            captura=True
+            captura_dama=True
+        print(captura_dama)
+
 
         #SE HOUVER UMA PEÇA QUE POSSA SER CAPTURADA, O JOGADOR É OBRIGADO A FAZER ISSO
-        if (x==True or y==True) and captura==False:
+        if (x==True or y==True) and captura==False and captura_dama==False:
             valido=False
 
         while valido==False:
+            while True:
+                try:
+                    print("Jogada inválida, por favor, tente novamente")
+                    #SE O MOVIMENTO NÃO FOR VÁLIDO, O CÓDIGO SE REPETE
 
-            #SE O MOVIMENTO FOR INVÁLIDO, O CÓDIGO SE REPETE
-            print("Jogada inválida, por favor, tente novamente")
 
-            entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
+                    entrada= input("Turno do Jogador de Baixo, coloque a entrada na forma <COLUNA_INICIAL><LINHA_INICIAL>--<COLUNA_FINAL><LINHA_FINAL>\n").split("--")
 
-            cordenadas_inicio=converter(entrada[0])
+                    cordenadas_inicio=converter(entrada[0])
 
-            coluna_inicio=(ord(cordenadas_inicio[0])-64)
+                    coluna_inicio=(ord(cordenadas_inicio[0])-64)
 
-            linha_inicio=(int(cordenadas_inicio[1])*2+2)
+                    linha_inicio=(int(cordenadas_inicio[1])*2+2)
 
-            cordenadas_final=converter(entrada[1])
+                    cordenadas_final=converter(entrada[1])
 
-            coluna_final=(ord(cordenadas_final[0])-64)
+                    coluna_final=(ord(cordenadas_final[0])-64)
 
-            linha_final=(int(cordenadas_final[1])*2+2)
+                    linha_final=(int(cordenadas_final[1])*2+2)
+                    break
+                except (ValueError,IndexError):
+                    print("insira uma entrada válida!")
 
             valido=False
             captura=False
+            captura_dama=False
 
             x=dama_pode_comer2(matriz)
-            y=pode_ser_comida2(matriz)
+            y=pode_ser_comida1(matriz)
+            print(x,y)
             z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
 
-            #MOVIMENTO NORMAL DE UMA PEÇA NORMAL
+            #MOVIMENTO NORMAL DE PEÇA NORMAL
             if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
-                valido=True 
+                valido=True
 
-            #MOVIMENTO NORMAL DE UMA DAMA
+            #OS DOIS ELIFS VERIFICAM SE É UM MOVIMENTO NORMAL DE UMA DAMA, OLHANDO AS CONDIÇÕES PARA QUE ELE ACONTEÇA 
             elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
                 valido=True
             elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
                 valido=True
 
-            #MOVIMENTO DE CAPTURA FEITO POR UMA PEÇA NORMAL
+            #O IF E O ELIF VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA PEÇA NORMAL
             if matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O")) and matriz[linha_final][coluna_final]==" ":
                 valido=True
                 captura=True
@@ -641,22 +827,21 @@ def jogada_player2(matriz):
                 valido=True
                 captura=True
 
-            #MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
-            elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O") and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+            #OS PROXIMOS QUATRO ELIFS VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
+            elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
                 valido=True
-                captura=True
-            elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+                captura_dama=True
+            elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
                 valido=True
-                captura=True
-            elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final-2][coluna_final+1]=="o" or matriz[linha_final-2][coluna_final+1]=="O") and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True:
+                captura_dama=True
+            elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
                 valido=True
-                captura=True
-            elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final+2][coluna_final-1]=="o" or matriz[linha_final+2][coluna_final-1]=="O") and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True:                                                                                        
+                captura_dama=True
+            elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:                                                                                        
                 valido=True
-                captura=True
-
+                captura_dama=True
             #SE HOUVER UMA PEÇA QUE POSSA SER CAPTURADA, O JOGADOR É OBRIGADO A FAZER ISSO
-            if (x==True or y==True) and captura==False:
+            if (x==True or y==True) and captura==False and captura_dama==False:
                 valido=False
         
         aux=matriz[linha_inicio][coluna_inicio]
@@ -687,6 +872,15 @@ def jogada_player2(matriz):
 
             matriz=eh_dama(matriz)
             
+            print_tabuleiro(matriz)
+            print("Você comeu uma peça! Jogue novamente.")
+            jogada_player2(matriz)
+        elif captura_dama==True:
+            #SE UMA DAMA CAPTURAR, A DIAGONAL SE TORNA VAZIA
+            esvaziar_caminho(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
+
+            quantidade_de_peças1= quantidade_de_peças1 - 1
+            matriz=eh_dama(matriz)
             print_tabuleiro(matriz)
             print("Você comeu uma peça! Jogue novamente.")
             jogada_player2(matriz)
@@ -721,6 +915,7 @@ def jogadaoffline_player1(matriz,jogadas):
         captura=False
 
         #AS DUAS PRÓXIMAS VARIÁVEIS RECEBEM FUNÇÕES JÁ EXPLICADAS
+        captura_dama=False
         x=dama_pode_comer1(matriz)
         y=pode_ser_comida1(matriz)
         z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
@@ -746,22 +941,21 @@ def jogadaoffline_player1(matriz,jogadas):
             captura=True
 
         #OS PROXIMOS QUATRO ELIFS VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
-        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="@" or matriz[linha_final+2][coluna_final+1]=="&") and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="@" or matriz[linha_final-2][coluna_final-1]=="&") and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final-2][coluna_final+1]=="@" or matriz[linha_final-2][coluna_final+1]=="&") and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True:
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final+2][coluna_final-1]=="@" or matriz[linha_final+2][coluna_final-1]=="&") and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True:                                                                                        
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="O" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho1(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer1(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:                                                                                        
             valido=True
-            captura=True
-
+            captura_dama=True
 
         #VERIFICANDO SE NÃO HÁ NENHUMA PEÇA QUE POSSA SER COMIDA, SE HOUVER, O JOGADOR É OBRIGADO A EXECUTAR O MOVIMENTO DE COMÊ-LA
-        if (y==True or x==True) and captura==False:
+        if (y==True or x==True) and captura==False and captura_dama==False:
             valido=False
 
         if valido==False:
@@ -794,9 +988,18 @@ def jogadaoffline_player1(matriz,jogadas):
 
                 #POR FIM, APAGA-SE O ELEMENTO QUE ESTAVA NAS CORDENADAS DE CAPTURA
                 matriz[linha_captura][coluna_captura]=" "
+                matriz=eh_dama(matriz)
                 quantidade_de_peças2 = quantidade_de_peças2 - 1
                 #SE UMA PEÇA FOI CAPTURADA, A FUNÇÃO É EXECUTADA NOVAMENTE
                 jogaCima=True
+
+            elif captura_dama==True:
+                #SE UMA DAMA CAPTURAR, A DIAGONAL SE TORNA VAZIA
+                esvaziar_caminho(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
+
+                quantidade_de_peças2= quantidade_de_peças2 - 1
+                jogaCima=True
+            
             if captura==False:
                 jogaCima=False
 
@@ -824,22 +1027,22 @@ def jogadaoffline_player2(matriz,jogadas):
 
         valido=False
         captura=False
+        captura_dama=False
 
         x=dama_pode_comer2(matriz)
-        y=pode_ser_comida2(matriz)
+        y=pode_ser_comida1(matriz)
         z=dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
-
         #MOVIMENTO NORMAL DE PEÇA NORMAL
-        if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1)))  and matriz[linha_final][coluna_final]==" ":
+        if matriz[linha_inicio][coluna_inicio]=="@" and (((linha_final==linha_inicio-2) and (coluna_final==coluna_inicio+1 or coluna_final==coluna_inicio-1))) and matriz[linha_final][coluna_final]==" ":
             valido=True
 
-        #MOVIMENTO NORMAL DE DAMA
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
+        #OS DOIS ELIFS VERIFICAM SE É UM MOVIMENTO NORMAL DE UMA DAMA, OLHANDO AS CONDIÇÕES PARA QUE ELE ACONTEÇA 
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and z==True:
             valido=True
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" "and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and z==True:
             valido=True
 
-        #MOVIMENTO DE CAPTURA FEITO POR UMA PEÇA NORMAL
+        #O IF E O ELIF VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA PEÇA NORMAL
         if matriz[linha_inicio][coluna_inicio]=="@" and (linha_final==linha_inicio+4 and coluna_final==coluna_inicio+2 and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") or linha_final==linha_inicio-4 and coluna_final==coluna_inicio-2 and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O")) and matriz[linha_final][coluna_final]==" ":
             valido=True
             captura=True
@@ -847,22 +1050,22 @@ def jogadaoffline_player2(matriz,jogadas):
             valido=True
             captura=True
 
-        #MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final+2][coluna_final+1]=="o" or matriz[linha_final+2][coluna_final+1]=="O") and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final+1)==True:
+        #OS PROXIMOS QUATRO ELIFS VERIFICAM SE É UM MOVIMENTO DE CAPTURA FEITO POR UMA DAMA
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and (matriz[linha_final-2][coluna_final-1]=="o" or matriz[linha_final-2][coluna_final-1]=="O") and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final-1)==True:
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final+(coluna_inicio-coluna_final)-coluna_final)==(linha_inicio-coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final-2][coluna_final+1]=="o" or matriz[linha_final-2][coluna_final+1]=="O") and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final-2,coluna_final+1)==True:
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_final-linha_inicio>2 and coluna_inicio-coluna_final>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:
             valido=True
-            captura=True
-        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and (matriz[linha_final+2][coluna_final-1]=="o" or matriz[linha_final+2][coluna_final-1]=="O") and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and dama_ta_livre(matriz,linha_inicio,coluna_inicio,linha_final+2,coluna_final-1)==True:                                                                                        
+            captura_dama=True
+        elif matriz[linha_inicio][coluna_inicio]=="&" and matriz[linha_final][coluna_final]==" " and ((linha_final-(coluna_inicio-coluna_final)+coluna_final)==(linha_inicio+coluna_inicio)) and tem_comida_no_caminho2(matriz,linha_inicio,coluna_inicio)==True and linha_inicio-linha_final>2 and coluna_final-coluna_inicio>1 and ta_livre_pra_comer2(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)==True:                                                                                        
             valido=True
-            captura=True
+            captura_dama=True
 
         #SE HOUVER UMA PEÇA QUE POSSA SER CAPTURADA, O JOGADOR É OBRIGADO A FAZER ISSO
-        if (x==True or y==True) and captura==False:
+        if (x==True or y==True) and captura==False and captura_dama==False:
             valido=False
 
         if valido==False:
@@ -895,6 +1098,14 @@ def jogadaoffline_player2(matriz,jogadas):
                 matriz[linha_captura][coluna_captura]=" "
                 quantidade_de_peças1= quantidade_de_peças1 - 1
                 jogaCima=False
+
+            elif captura_dama==True:
+                #SE UMA DAMA CAPTURAR, A DIAGONAL SE TORNA VAZIA
+                esvaziar_caminho(matriz,linha_inicio,coluna_inicio,linha_final,coluna_final)
+
+                quantidade_de_peças1= quantidade_de_peças1 - 1
+                jogaCima=False
+
             if captura==False:
                 jogaCima=True
             
@@ -1075,4 +1286,3 @@ else:
             novamente_bool = True
         elif novamente == 0:
             novamente_bool = False
-        
