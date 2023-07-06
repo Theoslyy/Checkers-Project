@@ -1000,7 +1000,7 @@ def jogadaoffline_player1(matriz,jogadas):
                 quantidade_de_peças2= quantidade_de_peças2 - 1
                 jogaCima=True
             
-            if captura==False:
+            if captura==False and captura_dama==False:
                 jogaCima=False
 
         return matriz, valido
@@ -1105,8 +1105,9 @@ def jogadaoffline_player2(matriz,jogadas):
 
                 quantidade_de_peças1= quantidade_de_peças1 - 1
                 jogaCima=False
+                print(jogaCima)
 
-            if captura==False:
+            if captura==False and captura_dama==False:
                 jogaCima=True
             
         return matriz, valido
@@ -1286,4 +1287,3 @@ else:
             novamente_bool = True
         elif novamente == 0:
             novamente_bool = False
-        
