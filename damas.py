@@ -1173,37 +1173,6 @@ if len(sys.argv)>1: #SE A LINHA DE COMANDO DO TERMINAL FOR MAIOR DO QUE 1 COMAND
                 matriz=eh_dama(matriz)
             turno+=1
 
-
-    '''if jogadasLista[0]=="C":
-        del jogadasLista[0]
-        while jogo:
-            if turno%2==0:
-                matriz=jogada_player1(matriz)
-                matriz=eh_dama(matriz)
-                del jogadasLista[0]
-            if turno%2==1:
-                matriz=jogada_player2(matriz)
-                matriz=eh_dama(matriz)
-                del jogadasLista[0]
-            if quantidade_de_peças1==0 or quantidade_de_peças2==0 or len(jogadasLista)==0:
-                jogo=False
-                print_tabuleiro(matriz)
-    elif jogadasLista[0]=="B":
-        del jogadasLista[0]
-        while jogo:
-            if turno%2==0:
-                matriz=jogada_player2(matriz)
-                matriz=eh_dama(matriz)
-                del jogadasLista[0]
-            if turno%2==1:
-                matriz=jogada_player1(matriz)
-                matriz=eh_dama(matriz)
-                del jogadasLista[0]
-            if quantidade_de_peças1==0 or quantidade_de_peças2==0 or len(jogadasLista)==0:
-                jogo=False
-                print_tabuleiro(matriz)
-    print(jogadasLista)'''
-
 else:
     while novamente_bool == True:
         modoOffline=False
